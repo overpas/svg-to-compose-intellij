@@ -1,0 +1,43 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.intellij' version '1.3.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.0'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven { url "https://maven.google.com" }
+    maven { url "https://jitpack.io" }
+    maven { url "https://jetbrains.bintray.com/trove4j" }
+}
+
+ext {
+    junitVersion = "4.13.2"
+}
+
+dependencies {
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.0'
+    implementation('com.github.DevSrSouza:svg-to-compose:0.8.1') {
+        exclude group: 'xerces', module: 'xercesImpl'
+        exclude group: 'xml-apis', module: 'xml-apis'
+    }
+    testImplementation "junit:junit:$junitVersion"
+}
+
+// See https://github.com/JetBrains/gradle-intellij-plugin/
+intellij {
+    version.set("203.7717.56")
+    plugins.set(['com.intellij.java', 'android'])
+}
+
+patchPluginXml {
+    changeNotes.set("""
+      Initial implementation.""")
+}
+
+test {
+    useJUnit()
+}

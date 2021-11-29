@@ -1,0 +1,29 @@
+<idea-plugin>
+    <id>by.overpass.svg-to-compose-intellij</id>
+    <name>Svg to Compose</name>
+    <vendor email="pckeycalculator@gmail.com">overpass</vendor>
+
+    <description><![CDATA[
+    Generate Jetpack Compose Vector Icons from SVG files in Intellij IDEA via https://github.com/DevSrSouza/svg-to-compose
+    ]]></description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.java</depends>
+    <depends>org.jetbrains.android</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="by.overpass.svgtocomposeintellij.SvgToComposeAction"
+                class="by.overpass.svgtocomposeintellij.SvgToComposeAction"
+                text="ImageVector from SVG"
+                description="Create Compose ImageVector from SVG">
+            <add-to-group group-id="NewGroup" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
