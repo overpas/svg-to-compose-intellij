@@ -21,8 +21,8 @@
         <!-- Add your actions here -->
         <action id="by.overpass.svgtocomposeintellij.SvgToComposeAction"
                 class="by.overpass.svgtocomposeintellij.SvgToComposeAction"
-                text="ImageVector from SVG"
-                description="Create Compose ImageVector from SVG">
+                text="Jetpack Compose ImageVector"
+                description="Create Compose ImageVector from SVG or XML drawable">
             <add-to-group group-id="NewGroup" anchor="last"/>
         </action>
     </actions>

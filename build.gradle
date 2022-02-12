@@ -11,7 +11,6 @@ repositories {
     mavenCentral()
     maven { url "https://maven.google.com" }
     maven { url "https://jitpack.io" }
-    maven { url "https://jetbrains.bintray.com/trove4j" }
 }
 
 ext {
@@ -29,7 +28,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version.set("203.7717.56")
+    version.set("211.7628.21")
     plugins.set(['com.intellij.java', 'android'])
 }
 
