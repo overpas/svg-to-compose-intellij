@@ -71,11 +71,11 @@ class SvgToComposeWizardStep(
         }
         row {
             label("Output directory")
-            chooseFileField(model.outputDir)
+            chooseFileField(model.stubFile, model.outputDir)
         }
         row {
             label("Vector images directory")
-            chooseFileField(model.vectorsDir)
+            chooseFileField(model.stubFile, model.vectorsDir)
         }
         row {
             label("Vector image type")
@@ -108,9 +108,17 @@ private fun Row.stringField(prop: StringProperty): CellBuilder<JBTextField> {
     )
 }
 
-private fun Row.chooseFileField(prop: ObjectValueProperty<File>): CellBuilder<TextFieldWithBrowseButton> {
+private fun Row.chooseFileField(
+    stubFile: File,
+    prop: ObjectValueProperty<File>
+): CellBuilder<TextFieldWithBrowseButton> {
     return textFieldWithBrowseButton(
-        fileChooserDescriptor = fileChooserDescriptor(chooseFolders = true)
+        value = if (prop.get() != stubFile) {
+            prop.get().path
+        } else {
+            null
+        },
+        fileChooserDescriptor = fileChooserDescriptor(chooseFolders = true),
     ) { virtualFile ->
         prop.set(File(virtualFile.path))
         virtualFile.path

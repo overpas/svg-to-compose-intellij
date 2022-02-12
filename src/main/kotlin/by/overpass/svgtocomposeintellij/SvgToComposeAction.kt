@@ -4,8 +4,10 @@ import com.android.tools.idea.ui.wizard.StudioWizardDialogBuilder
 import com.android.tools.idea.wizard.model.ModelWizard
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.util.IconLoader
 import com.intellij.util.ui.JBUI
+import java.io.File
 
 class SvgToComposeAction : AnAction() {
 
@@ -21,7 +23,8 @@ class SvgToComposeAction : AnAction() {
                     SvgToComposeWizardStep(
                         SvgToComposeWizardModel(
                             event.project
-                                ?: throw IllegalStateException("Can't start Svg To Compose UI: the project is null")
+                                ?: throw IllegalStateException("Can't start Svg To Compose UI: the project is null"),
+                            event.targetDir,
                         ),
                         "Create Compose Icons from SVG or Android vector drawables",
                     )
@@ -35,6 +38,17 @@ class SvgToComposeAction : AnAction() {
             .build()
             .show()
     }
+
+    private val AnActionEvent.targetDir: File?
+        get() {
+            val dataContext = dataContext
+            var targetDirectory = CommonDataKeys.VIRTUAL_FILE.getData(dataContext) ?: return null
+            // If the user selected a simulated folder entry (eg "Manifests"), there will be no target directory
+            if (!targetDirectory.isDirectory) {
+                targetDirectory = targetDirectory.parent
+            }
+            return File(targetDirectory.path)
+        }
 
     companion object {
         val icon = IconLoader.getIcon("/icons/ic_compose.png", SvgToComposeAction::class.java)

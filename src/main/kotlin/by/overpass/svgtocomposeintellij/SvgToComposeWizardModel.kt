@@ -8,13 +8,13 @@ import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.project.Project
 import java.io.File
 
-class SvgToComposeWizardModel(private val project: Project) : WizardModel() {
+class SvgToComposeWizardModel(private val project: Project, targetDir: File?) : WizardModel() {
 
     val stubFile = File("")
 
     val applicationIconPackage = StringValueProperty("icons")
     val accessorName = StringValueProperty("MyIconPack")
-    val outputDir = ObjectValueProperty<File>(stubFile)
+    val outputDir = ObjectValueProperty<File>(targetDir ?: stubFile)
     val vectorsDir = ObjectValueProperty<File>(stubFile)
     val vectorImageType = ObjectValueProperty<VectorType>(VectorType.SVG)
     val allAssetsPropertyName = StringValueProperty("AllIcons")
