@@ -24,6 +24,7 @@ dependencies {
         exclude group: 'xml-apis', module: 'xml-apis'
     }
     testImplementation "junit:junit:$junitVersion"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/

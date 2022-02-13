@@ -1,10 +1,11 @@
 package by.overpass.svgtocomposeintellij.data
 
+import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
 
 interface SvgToComposeTaskFactory {
 
-    fun createTask(data: SvgToComposeData): SvgToComposeTask
+    fun createTask(data: SvgToComposeData): Task.Backgroundable
 
     companion object {
         operator fun invoke(
@@ -19,6 +20,6 @@ class SvgToComposeTaskFactoryImpl(
     private val svgToComposeDataProcessor: SvgToComposeDataProcessor,
 ) : SvgToComposeTaskFactory {
 
-    override fun createTask(data: SvgToComposeData): SvgToComposeTask =
+    override fun createTask(data: SvgToComposeData): Task.Backgroundable =
         SvgToComposeTask(project, svgToComposeDataProcessor(data))
 }

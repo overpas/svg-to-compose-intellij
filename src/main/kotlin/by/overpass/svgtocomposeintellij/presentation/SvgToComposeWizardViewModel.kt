@@ -21,7 +21,7 @@ class SvgToComposeWizardViewModel(
     val vectorImageType = ObjectValueProperty<VectorType>(VectorType.SVG)
     val allAssetsPropertyName = StringValueProperty("AllIcons")
 
-    override fun handleFinished() {
+    public override fun handleFinished() {
         svgToComposeService.convertSvgToCompose(
             SvgToComposeData(
                 applicationIconPackage = "",
