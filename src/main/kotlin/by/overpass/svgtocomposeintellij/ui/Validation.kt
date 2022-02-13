@@ -1,4 +1,4 @@
-package by.overpass.svgtocomposeintellij
+package by.overpass.svgtocomposeintellij.ui
 
 import com.android.tools.adtui.validation.Validator
 

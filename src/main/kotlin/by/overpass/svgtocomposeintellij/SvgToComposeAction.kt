@@ -1,10 +1,16 @@
 package by.overpass.svgtocomposeintellij
 
+import by.overpass.svgtocomposeintellij.data.SvgToComposeDataProcessor
+import by.overpass.svgtocomposeintellij.data.SvgToComposeService
+import by.overpass.svgtocomposeintellij.data.SvgToComposeTaskFactory
+import by.overpass.svgtocomposeintellij.presentation.SvgToComposeWizardViewModel
+import by.overpass.svgtocomposeintellij.ui.SvgToComposeWizardStep
 import com.android.tools.idea.ui.wizard.StudioWizardDialogBuilder
 import com.android.tools.idea.wizard.model.ModelWizard
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.util.IconLoader
 import com.intellij.util.ui.JBUI
 import java.io.File
@@ -21,9 +27,15 @@ class SvgToComposeAction : AnAction() {
             ModelWizard.Builder()
                 .addStep(
                     SvgToComposeWizardStep(
-                        SvgToComposeWizardModel(
-                            event.project
-                                ?: throw IllegalStateException("Can't start Svg To Compose UI: the project is null"),
+                        SvgToComposeWizardViewModel(
+                            SvgToComposeService(
+                                ProgressManager.getInstance(),
+                                SvgToComposeTaskFactory(
+                                    event.project
+                                        ?: throw IllegalStateException("Can't start Svg2Compose UI: the project is null"),
+                                    SvgToComposeDataProcessor(),
+                                )
+                            ),
                             event.targetDir,
                         ),
                         "Create Compose Icons from SVG or Android vector drawables",

@@ -1,6 +1,7 @@
-package by.overpass.svgtocomposeintellij
+package by.overpass.svgtocomposeintellij.ui
 
 import br.com.devsrsouza.svg2compose.VectorType
+import by.overpass.svgtocomposeintellij.presentation.SvgToComposeWizardViewModel
 import com.android.tools.adtui.validation.ValidatorPanel
 import com.android.tools.idea.observable.core.ObjectValueProperty
 import com.android.tools.idea.observable.core.ObservableBool
@@ -19,9 +20,9 @@ import javax.swing.JSpinner
 import javax.swing.SpinnerListModel
 
 class SvgToComposeWizardStep(
-    model: SvgToComposeWizardModel,
+    model: SvgToComposeWizardViewModel,
     title: String,
-) : ModelWizardStep<SvgToComposeWizardModel>(model, title) {
+) : ModelWizardStep<SvgToComposeWizardViewModel>(model, title) {
 
     private val validatorPanel: ValidatorPanel by lazy {
         ValidatorPanel(this, component).apply {
