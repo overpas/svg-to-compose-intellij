@@ -15,7 +15,6 @@ class SvgToComposeWizardViewModel(
 
     val stubFile = File("")
 
-    val applicationIconPackage = StringValueProperty("icons")
     val accessorName = StringValueProperty("MyIconPack")
     val outputDir = ObjectValueProperty<File>(targetDir ?: stubFile)
     val vectorsDir = ObjectValueProperty<File>(stubFile)
@@ -25,7 +24,7 @@ class SvgToComposeWizardViewModel(
     override fun handleFinished() {
         svgToComposeService.convertSvgToCompose(
             SvgToComposeData(
-                applicationIconPackage = applicationIconPackage.get(),
+                applicationIconPackage = "",
                 accessorName = accessorName.get(),
                 outputDir = outputDir.get(),
                 vectorsDir = vectorsDir.get(),

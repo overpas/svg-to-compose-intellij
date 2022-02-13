@@ -16,13 +16,12 @@ class SvgToComposeDataProcessorImpl : SvgToComposeDataProcessor {
 
     override operator fun invoke(data: SvgToComposeData): SvgToComposeData {
         val initialPath = data.outputDir.path
-        val initialPackage = data.applicationIconPackage
         val pkg = pathRegex.find(initialPath)?.groupValues?.get(2)
         return if (pkg.isNullOrEmpty()) {
             data
         } else {
             val newPath = initialPath.removeSuffix(pkg)
-            val newPackage = "${pkg.replace("[/\\\\]".toRegex(), ".")}.$initialPackage"
+            val newPackage = pkg.replace("[/\\\\]".toRegex(), ".")
             val outputDir = File(newPath)
             data.copy(outputDir = outputDir, applicationIconPackage = newPackage)
         }

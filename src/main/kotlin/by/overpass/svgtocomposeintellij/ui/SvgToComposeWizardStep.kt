@@ -27,10 +27,6 @@ class SvgToComposeWizardStep(
     private val validatorPanel: ValidatorPanel by lazy {
         ValidatorPanel(this, component).apply {
             registerValidator(
-                model.applicationIconPackage,
-                notEmptyStringValidator("Application icon package"),
-            )
-            registerValidator(
                 model.accessorName,
                 notEmptyStringValidator("Accessor name"),
             )
@@ -50,16 +46,6 @@ class SvgToComposeWizardStep(
     }
 
     override fun getComponent(): JComponent = panel {
-        row {
-            label("Application icon package")
-            stringField(model.applicationIconPackage)
-        }
-        row {
-            comment(
-                "Represents what will be the final package of the generated Vector Source." +
-                        " ex com.yourcompany.yourapplication.icons"
-            )
-        }
         row {
             label("Accessor name")
             stringField(model.accessorName)
