@@ -28,7 +28,7 @@ class SvgToComposeDataProcessorImplTest {
         val data = SvgToComposeData(
             applicationIconPackage = "",
             accessorName = "",
-            outputDir = File("C:\\Users\\User\\Projects\\Project\\src\\kotlin\\com\\example\\icons"),
+            outputDir = File("C:/Users/User/Projects/Project/src/kotlin/com/example/icons"),
             vectorsDir = File(""),
             vectorImageType = VectorType.SVG,
             allAssetsPropertyName = "",
@@ -36,7 +36,7 @@ class SvgToComposeDataProcessorImplTest {
         val expected = SvgToComposeData(
             applicationIconPackage = "com.example.icons",
             accessorName = "",
-            outputDir = File("C:\\Users\\User\\Projects\\Project\\src\\kotlin"),
+            outputDir = File("C:/Users/User/Projects/Project/src/kotlin"),
             vectorsDir = File(""),
             vectorImageType = VectorType.SVG,
             allAssetsPropertyName = "",
