@@ -4,7 +4,13 @@
     <vendor email="pckeycalculator@gmail.com">overpass</vendor>
 
     <description><![CDATA[
-    Generate Jetpack Compose Vector Icons from SVG files in Intellij IDEA via https://github.com/DevSrSouza/svg-to-compose
+    <p>Generate Jetpack Compose Vector Icons from SVG files in Intellij IDEA.</p>
+    <p>This plugin is a wrapper for the <a href="https://github.com/DevSrSouza/svg-to-compose">svg-to-compose tool</a></p>
+    <p>Use cases:</p>
+    <ul>
+        <li>Manipulate dynamic an SVG file in code, you can generate and do source code modifications</li>
+        <li>Create an Icon pack similar to how Material Icons works on Compose</li>
+    </ul>
     ]]></description>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
