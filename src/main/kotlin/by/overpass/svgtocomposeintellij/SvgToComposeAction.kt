@@ -15,6 +15,13 @@ import com.intellij.openapi.util.IconLoader
 import com.intellij.util.ui.JBUI
 import java.io.File
 
+private const val MESSAGE_PROJECT_NULL = "Can't start Svg2Compose UI: the project is null"
+
+private const val MIN_WINDOW_WIDTH = 800
+private const val MIN_WINDOW_HEIGHT = 600
+private const val PREFERRED_WINDOW_WIDTH = 1020
+private const val PREFERRED_WINDOW_HEIGHT = 680
+
 class SvgToComposeAction : AnAction() {
 
     override fun update(e: AnActionEvent) {
@@ -32,7 +39,7 @@ class SvgToComposeAction : AnAction() {
                                 ProgressManager.getInstance(),
                                 SvgToComposeTaskFactory(
                                     event.project
-                                        ?: throw IllegalStateException("Can't start Svg2Compose UI: the project is null"),
+                                        ?: throw IllegalStateException(MESSAGE_PROJECT_NULL),
                                     SvgToComposeDataProcessor(),
                                 )
                             ),
@@ -45,8 +52,8 @@ class SvgToComposeAction : AnAction() {
             "SVG to Compose",
         )
             .setProject(event.project)
-            .setMinimumSize(JBUI.size(800, 600))
-            .setPreferredSize(JBUI.size(1020, 680))
+            .setMinimumSize(JBUI.size(MIN_WINDOW_WIDTH, MIN_WINDOW_HEIGHT))
+            .setPreferredSize(JBUI.size(PREFERRED_WINDOW_WIDTH, PREFERRED_WINDOW_HEIGHT))
             .build()
             .show()
     }
