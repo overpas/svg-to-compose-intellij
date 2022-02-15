@@ -24,3 +24,5 @@ local.properties
 !.idea/inspectionProfiles
 
 .DS_Store
+
+.secrets
