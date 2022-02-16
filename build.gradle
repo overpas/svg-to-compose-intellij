@@ -34,9 +34,19 @@ intellij {
     plugins.set(['com.intellij.java', 'android'])
 }
 
+signPlugin {
+    certificateChain = System.getenv("CERTIFICATE_CHAIN")
+    privateKey = System.getenv("PRIVATE_KEY")
+    password = System.getenv("PRIVATE_KEY_PASSWORD")
+}
+
+publishPlugin {
+    token = System.getenv("PUBLISH_TOKEN")
+}
+
 patchPluginXml {
     changeNotes.set("""
-      Initial implementation.""")
+      Update plugin description""")
 }
 
 test {
