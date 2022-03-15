@@ -16,9 +16,9 @@ class SvgToComposeWizardViewModel(
     val stubFile = File("")
 
     val accessorName = StringValueProperty("MyIconPack")
-    val outputDir = ObjectValueProperty<File>(targetDir ?: stubFile)
-    val vectorsDir = ObjectValueProperty<File>(stubFile)
-    val vectorImageType = ObjectValueProperty<VectorType>(VectorType.SVG)
+    val outputDir = ObjectValueProperty(targetDir ?: stubFile)
+    val vectorsDir = ObjectValueProperty(stubFile)
+    val vectorImageType = ObjectValueProperty(VectorType.SVG)
     val allAssetsPropertyName = StringValueProperty("AllIcons")
 
     public override fun handleFinished() {
