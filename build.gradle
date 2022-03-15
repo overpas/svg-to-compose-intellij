@@ -46,7 +46,7 @@ publishPlugin {
 
 patchPluginXml {
     changeNotes.set("""
-      Update plugin description""")
+      Fix the bug when icons couldn't be generated from android vector drawables""")
 }
 
 test {
