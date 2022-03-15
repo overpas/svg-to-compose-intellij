@@ -8,16 +8,17 @@ import com.android.tools.idea.observable.core.ObservableBool
 import com.android.tools.idea.observable.core.StringProperty
 import com.android.tools.idea.wizard.model.ModelWizardStep
 import com.intellij.openapi.fileChooser.FileChooserDescriptor
+import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import com.intellij.ui.EnumComboBoxModel
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.layout.CellBuilder
 import com.intellij.ui.layout.Row
 import com.intellij.ui.layout.panel
+import com.intellij.ui.layout.toNullable
 import org.jetbrains.kotlin.idea.core.util.onTextChange
 import java.io.File
 import javax.swing.JComponent
-import javax.swing.JSpinner
-import javax.swing.SpinnerListModel
 
 class SvgToComposeWizardStep(
     model: SvgToComposeWizardViewModel,
@@ -66,7 +67,7 @@ class SvgToComposeWizardStep(
         }
         row {
             label("Vector image type")
-            vectorTypeSpinner(model.vectorImageType, VectorType.values())
+            vectorTypeComboBox(model.vectorImageType)
         }
         row {
             label("All assets property name")
@@ -128,19 +129,10 @@ private fun fileChooserDescriptor(
     chooseMultiple,
 )
 
-private fun Row.vectorTypeSpinner(
-    prop: ObjectValueProperty<VectorType>,
-    vectorTypes: Array<VectorType>
-): CellBuilder<JSpinner> {
-    val jSpinner = JSpinner()
-    jSpinner.model = SpinnerListModel(vectorTypes)
-    return component(jSpinner).withBinding(
-        { spinner ->
-            spinner.value as VectorType
-        },
-        { spinner, vectorType ->
-            spinner.value = vectorType
-        },
-        prop.toBinding(),
-    )
+private fun Row.vectorTypeComboBox(prop: ObjectValueProperty<VectorType>): CellBuilder<ComboBox<VectorType>> {
+    val comboBoxModel = EnumComboBoxModel(VectorType::class.java)
+    comboBoxModel.onSelected {
+        prop.set(it)
+    }
+    return comboBox(comboBoxModel, prop.toBinding().toNullable())
 }
