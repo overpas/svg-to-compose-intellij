@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'by.overpass'
-version '0.2'
+version '0.3'
 
 repositories {
     mavenCentral()
@@ -46,7 +46,7 @@ publishPlugin {
 
 patchPluginXml {
     changeNotes.set("""
-      Fix the bug when icons couldn't be generated from android vector drawables""")
+      Updated target Intellij version""")
 }
 
 test {
