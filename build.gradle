@@ -1,8 +1,8 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '1.6.0'
-    id 'org.jetbrains.kotlin.jvm' version '1.6.21'
-    id 'io.gitlab.arturbosch.detekt' version '1.19.0'
+    id 'org.jetbrains.intellij' version '1.7.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.7.10'
+    id 'io.gitlab.arturbosch.detekt' version '1.21.0-RC2'
 }
 
 group 'by.overpass'
@@ -19,7 +19,7 @@ ext {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.6.21'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.10'
     implementation('com.github.DevSrSouza:svg-to-compose:0.8.1') {
         exclude group: 'xerces', module: 'xercesImpl'
         exclude group: 'xml-apis', module: 'xml-apis'
@@ -35,13 +35,13 @@ intellij {
 }
 
 signPlugin {
-    certificateChain = System.getenv("CERTIFICATE_CHAIN")
-    privateKey = System.getenv("PRIVATE_KEY")
-    password = System.getenv("PRIVATE_KEY_PASSWORD")
+    certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
+    privateKey.set(System.getenv("PRIVATE_KEY"))
+    password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
 }
 
 publishPlugin {
-    token = System.getenv("PUBLISH_TOKEN")
+    token.set(System.getenv("PUBLISH_TOKEN"))
 }
 
 patchPluginXml {
