@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'by.overpass'
-version '0.3'
+version '0.4'
 
 repositories {
     mavenCentral()
@@ -30,7 +30,7 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version.set("212.5712.43")
+    version.set("213.7172.25")
     plugins.set(['com.intellij.java', 'android'])
 }
 
