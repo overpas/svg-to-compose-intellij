@@ -1,19 +1,10 @@
 package by.overpass.svgtocomposeintellij.data
 
+import by.overpass.svgtocomposeintellij.domain.SvgToComposeData
+import by.overpass.svgtocomposeintellij.domain.SvgToComposeDataProcessor
+import by.overpass.svgtocomposeintellij.domain.SvgToComposeTaskFactory
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project
-
-interface SvgToComposeTaskFactory {
-
-    fun createTask(data: SvgToComposeData): Task.Backgroundable
-
-    companion object {
-        operator fun invoke(
-            project: Project,
-            svgToComposeDataProcessor: SvgToComposeDataProcessor,
-        ): SvgToComposeTaskFactory = SvgToComposeTaskFactoryImpl(project, svgToComposeDataProcessor)
-    }
-}
 
 class SvgToComposeTaskFactoryImpl(
     private val project: Project,

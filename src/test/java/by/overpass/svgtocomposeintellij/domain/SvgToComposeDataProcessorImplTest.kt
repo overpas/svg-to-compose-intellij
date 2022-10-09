@@ -1,4 +1,4 @@
-package by.overpass.svgtocomposeintellij.data
+package by.overpass.svgtocomposeintellij.domain
 
 import br.com.devsrsouza.svg2compose.VectorType
 import org.junit.Assert.assertEquals

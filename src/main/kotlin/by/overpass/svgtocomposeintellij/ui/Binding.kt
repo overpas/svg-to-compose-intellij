@@ -1,15 +1,9 @@
 package by.overpass.svgtocomposeintellij.ui
 
-import com.android.tools.idea.observable.core.ObjectValueProperty
-import com.android.tools.idea.observable.core.StringProperty
 import com.intellij.ui.layout.PropertyBinding
+import kotlin.reflect.KMutableProperty
 
-fun StringProperty.toBinding(): PropertyBinding<String> = PropertyBinding(
-    get = { get() },
-    set = { set(it) },
-)
-
-fun <T> ObjectValueProperty<T>.toBinding(): PropertyBinding<T> = PropertyBinding(
-    get = { get() },
-    set = { set(it) },
+fun <T> KMutableProperty<T>.toBinding(): PropertyBinding<T> = PropertyBinding(
+    get = { getter.call() },
+    set = { setter.call(it) },
 )

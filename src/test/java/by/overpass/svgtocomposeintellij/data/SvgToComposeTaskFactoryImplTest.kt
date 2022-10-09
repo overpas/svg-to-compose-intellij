@@ -1,6 +1,8 @@
 package by.overpass.svgtocomposeintellij.data
 
 import br.com.devsrsouza.svg2compose.VectorType
+import by.overpass.svgtocomposeintellij.domain.SvgToComposeData
+import by.overpass.svgtocomposeintellij.domain.SvgToComposeDataProcessor
 import com.intellij.openapi.project.Project
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -22,7 +24,7 @@ class SvgToComposeTaskFactoryImplTest {
         "",
     )
 
-    private val factory = SvgToComposeTaskFactory(mockProject, mockProcessor)
+    private val factory = SvgToComposeTaskFactoryImpl(mockProject, mockProcessor)
 
     @Test
     fun `test data processor triggered when task created`() {
