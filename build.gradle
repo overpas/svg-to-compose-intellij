@@ -48,7 +48,9 @@ publishPlugin {
 
 patchPluginXml {
     changeNotes.set("""
-      Updated target Intellij version""")
+      A crash on Android Studio Dolphin fixed;
+      UI tweaks.
+      """)
 }
 
 test {
