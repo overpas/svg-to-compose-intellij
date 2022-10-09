@@ -1,6 +1,7 @@
 package by.overpass.svgtocomposeintellij.data
 
 import br.com.devsrsouza.svg2compose.Svg2Compose
+import by.overpass.svgtocomposeintellij.domain.SvgToComposeData
 import com.intellij.openapi.progress.ProgressIndicator
 import com.intellij.openapi.progress.Task
 import com.intellij.openapi.project.Project

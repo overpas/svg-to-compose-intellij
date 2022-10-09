@@ -1,4 +1,4 @@
-package by.overpass.svgtocomposeintellij.data
+package by.overpass.svgtocomposeintellij.domain
 
 import com.intellij.openapi.progress.ProgressManager
 
@@ -7,6 +7,7 @@ interface SvgToComposeService {
     fun convertSvgToCompose(data: SvgToComposeData)
 
     companion object {
+
         operator fun invoke(
             progressManager: ProgressManager,
             svgToComposeTaskFactory: SvgToComposeTaskFactory,
@@ -14,7 +15,7 @@ interface SvgToComposeService {
     }
 }
 
-class SvgToComposeServiceImpl(
+private class SvgToComposeServiceImpl(
     private val progressManager: ProgressManager,
     private val svgToComposeTaskFactory: SvgToComposeTaskFactory,
 ) : SvgToComposeService {

@@ -1,16 +1,18 @@
-package by.overpass.svgtocomposeintellij.data
+package by.overpass.svgtocomposeintellij.domain
 
 import java.io.File
 
 interface SvgToComposeDataProcessor {
+
     operator fun invoke(data: SvgToComposeData): SvgToComposeData
 
     companion object {
+
         operator fun invoke(): SvgToComposeDataProcessor = SvgToComposeDataProcessorImpl()
     }
 }
 
-class SvgToComposeDataProcessorImpl : SvgToComposeDataProcessor {
+private class SvgToComposeDataProcessorImpl : SvgToComposeDataProcessor {
 
     private val pathRegex = ".*[/\\\\](kotlin|java)[/\\\\](.*)".toRegex()
 
