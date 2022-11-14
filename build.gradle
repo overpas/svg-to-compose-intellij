@@ -21,7 +21,7 @@ ext {
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.20'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.21"
     implementation('com.github.DevSrSouza:svg-to-compose:0.8.1') {
         exclude group: 'xerces', module: 'xercesImpl'
         exclude group: 'xml-apis', module: 'xml-apis'
