@@ -1,12 +1,12 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '1.9.0'
+    id 'org.jetbrains.intellij' version '1.12.0'
     id 'org.jetbrains.kotlin.jvm' version '1.7.20'
     id 'io.gitlab.arturbosch.detekt' version '1.21.0'
 }
 
 group 'by.overpass'
-version '0.5'
+version '0.6'
 
 repositories {
     mavenCentral()
@@ -32,8 +32,14 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version.set("213.7172.25")
+    version.set("221.6008.13")
     plugins.set(['java', 'Kotlin'])
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of("11"))
+    }
 }
 
 signPlugin {
@@ -48,8 +54,7 @@ publishPlugin {
 
 patchPluginXml {
     changeNotes.set("""
-      A crash on Android Studio Dolphin fixed;
-      UI tweaks.
+        Android Studio Electric Eel | 2022.1.1 support
       """)
 }
 
