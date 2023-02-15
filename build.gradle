@@ -52,6 +52,13 @@ publishPlugin {
     token.set(System.getenv("PUBLISH_TOKEN"))
 }
 
+tasks {
+    patchPluginXml {
+        sinceBuild.set("221.6008.13")
+        untilBuild.set("223.8617.56")
+    }
+}
+
 patchPluginXml {
     changeNotes.set("""
         Android Studio Electric Eel | 2022.1.1 support

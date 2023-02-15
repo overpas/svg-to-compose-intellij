@@ -8,24 +8,25 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.ComboBox
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.openapi.ui.TextFieldWithBrowseButton
+import com.intellij.ui.DocumentAdapter
 import com.intellij.ui.EnumComboBoxModel
 import com.intellij.ui.components.JBTextField
 import com.intellij.ui.layout.CellBuilder
 import com.intellij.ui.layout.Row
 import com.intellij.ui.layout.panel
 import com.intellij.ui.layout.toNullable
+import java.awt.event.ActionEvent
+import java.io.File
+import javax.swing.Action
+import javax.swing.JComponent
+import javax.swing.event.DocumentEvent
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.KMutableProperty0
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.jetbrains.kotlin.idea.core.util.onTextChange
-import java.awt.event.ActionEvent
-import java.io.File
-import javax.swing.Action
-import javax.swing.JComponent
-import kotlin.reflect.KMutableProperty
-import kotlin.reflect.KMutableProperty0
 
 class SvgToComposeDialog(
     project: Project,
@@ -101,10 +102,14 @@ class SvgToComposeDialog(
 
 fun Row.stringField(prop: KMutableProperty0<String>): CellBuilder<JBTextField> {
     return textField(prop).apply {
-        component.onTextChange { documentEvent ->
-            val text = documentEvent.document.getText(0, documentEvent.document.length)
-            prop.set(text)
-        }
+        component.document.addDocumentListener(
+            object : DocumentAdapter() {
+                override fun textChanged(documentEvent: DocumentEvent) {
+                    val text = documentEvent.document.getText(0, documentEvent.document.length)
+                    prop.set(text)
+                }
+            }
+        )
     }
 }
 
