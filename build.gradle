@@ -61,7 +61,8 @@ tasks {
 
 patchPluginXml {
     changeNotes.set("""
-        Android Studio Electric Eel | 2022.1.1 support
+        Intellij Idea support up to 223.8617.56
+        Action position adjusted
       """)
 }
 
