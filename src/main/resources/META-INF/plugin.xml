@@ -29,7 +29,7 @@
                 class="by.overpass.svgtocomposeintellij.SvgToComposeAction"
                 text="Jetpack Compose ImageVector"
                 description="Create Compose ImageVector from SVG or XML drawable">
-            <add-to-group group-id="NewGroup" anchor="last"/>
+            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Kotlin.NewFile"/>
         </action>
     </actions>
 </idea-plugin>
