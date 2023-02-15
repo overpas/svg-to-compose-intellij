@@ -1,8 +1,8 @@
 plugins {
     id 'java'
     id 'org.jetbrains.intellij' version '1.12.0'
-    id 'org.jetbrains.kotlin.jvm' version '1.7.20'
-    id 'io.gitlab.arturbosch.detekt' version '1.21.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.10'
+    id 'io.gitlab.arturbosch.detekt' version '1.22.0'
 }
 
 group 'by.overpass'
@@ -19,15 +19,15 @@ ext {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.7.20'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.10'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.20"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
     implementation('com.github.DevSrSouza:svg-to-compose:0.8.1') {
         exclude group: 'xerces', module: 'xercesImpl'
         exclude group: 'xml-apis', module: 'xml-apis'
     }
     testImplementation "junit:junit:$junitVersion"
-    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.1.0"
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
