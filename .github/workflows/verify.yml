@@ -13,5 +13,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Test
+      - name: Check IDE compatibility
         run: ./gradlew runPluginVerifier
