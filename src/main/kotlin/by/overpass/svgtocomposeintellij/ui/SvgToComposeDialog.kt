@@ -36,14 +36,12 @@ class SvgToComposeDialog(
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
     private val ui = panel {
+        noteRow(
+            "Accessor name be used to access the Vector in the code like `MyIconPack.IconName` or" +
+                    " `MyIconPack.IconGroupDir.IconName`",
+        )
         row("Accessor name") {
             stringField(model::accessorName).withValidator(JBTextField::getText, model::validateAccessorName)
-        }
-        row {
-            comment(
-                "Will be used to access the Vector in the code like `MyIconPack.IconName` " +
-                        "or `MyIconPack.IconGroupDir.IconName`"
-            )
         }
         row("Output directory") {
             chooseFolderField(model.stubFile, model::outputDir)
