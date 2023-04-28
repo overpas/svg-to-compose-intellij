@@ -1,12 +1,12 @@
 plugins {
     id 'java'
-    id 'org.jetbrains.intellij' version '1.12.0'
+    id 'org.jetbrains.intellij' version '1.13.2'
     id 'org.jetbrains.kotlin.jvm' version '1.8.10'
     id 'io.gitlab.arturbosch.detekt' version '1.22.0'
 }
 
 group 'by.overpass'
-version '0.7'
+version '0.8'
 
 repositories {
     mavenCentral()
@@ -55,14 +55,13 @@ publishPlugin {
 tasks {
     patchPluginXml {
         sinceBuild.set("221.6008.13")
-        untilBuild.set("223.8617.56")
+        untilBuild.set("231.8109.175")
     }
 }
 
 patchPluginXml {
     changeNotes.set("""
-        Intellij Idea support up to 223.8617.56
-        Action position adjusted
+        Intellij Idea support up to 231.8109.175
       """)
 }
 
