@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'by.overpass'
-version '0.8'
+version '0.9'
 
 repositories {
     mavenCentral()
@@ -61,7 +61,7 @@ tasks {
 
 patchPluginXml {
     changeNotes.set("""
-        Intellij Idea support up to 231.8109.175
+        Handle copy-pasted paths in output directory and vector images directory
       """)
 }
 
