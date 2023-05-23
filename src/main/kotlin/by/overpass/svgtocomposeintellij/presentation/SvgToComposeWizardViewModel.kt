@@ -4,9 +4,10 @@ import br.com.devsrsouza.svg2compose.VectorType
 import by.overpass.svgtocomposeintellij.domain.SvgToComposeData
 import by.overpass.svgtocomposeintellij.domain.SvgToComposeService
 import by.overpass.svgtocomposeintellij.presentation.validation.CantBeEmptyStringValidator
-import by.overpass.svgtocomposeintellij.presentation.validation.NonEqualToValueValidator
+import by.overpass.svgtocomposeintellij.presentation.validation.ProperDirValidator
 import by.overpass.svgtocomposeintellij.presentation.validation.ValidationResult
 import by.overpass.svgtocomposeintellij.presentation.validation.ValueValidator
+import java.io.File
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import java.io.File
 
 class SvgToComposeWizardViewModel(
     private val svgToComposeService: SvgToComposeService,
@@ -33,11 +33,8 @@ class SvgToComposeWizardViewModel(
 
     private val accessorNameValidator = CantBeEmptyStringValidator("Accessor name")
     private val allAssetsPropertyNameValidator = CantBeEmptyStringValidator("All assets property name")
-    private val outputDirValidator = NonEqualToValueValidator(stubFile, "Choose a proper output directory")
-    private val vectorsDirValidator = NonEqualToValueValidator(
-        stubFile,
-        "Choose a proper Vector images directory",
-    )
+    private val outputDirValidator = ProperDirValidator(stubFile)
+    private val vectorsDirValidator = ProperDirValidator(stubFile)
 
     private val accessorNameValid = MutableStateFlow(true)
     private val outputDirValid = MutableStateFlow(true)
@@ -58,11 +55,11 @@ class SvgToComposeWizardViewModel(
         return accessorName.validateProperty(accessorNameValid, accessorNameValidator)
     }
 
-    fun validateOutputDir(outputDir: File): ValidationResult<String> {
+    fun validateOutputDir(outputDir: File): ValidationResult<ProperDirValidator.Error> {
         return outputDir.validateProperty(outputDirValid, outputDirValidator)
     }
 
-    fun validateVectorsDir(vectorsDir: File): ValidationResult<String> {
+    fun validateVectorsDir(vectorsDir: File): ValidationResult<ProperDirValidator.Error> {
         return vectorsDir.validateProperty(vectorsDirValid, vectorsDirValidator)
     }
 
@@ -70,10 +67,10 @@ class SvgToComposeWizardViewModel(
         return allAssetsPropertyName.validateProperty(allAssetsPropertyNameValid, allAssetsPropertyNameValidator)
     }
 
-    private fun <T> T.validateProperty(
+    private fun <T, E> T.validateProperty(
         propertyValid: MutableSharedFlow<Boolean>,
-        validator: ValueValidator<T, String>,
-    ): ValidationResult<String> {
+        validator: ValueValidator<T, E>,
+    ): ValidationResult<E> {
         val result = validator.validate(this)
         coroutineScope.launch {
             val valid = result is ValidationResult.Ok
