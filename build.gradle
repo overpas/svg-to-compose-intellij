@@ -19,7 +19,7 @@ ext {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.10'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.8.21'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
     implementation('com.github.DevSrSouza:svg-to-compose:0.8.1') {
