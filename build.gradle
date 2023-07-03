@@ -19,7 +19,7 @@ ext {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2'
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.22"
     implementation('com.github.DevSrSouza:svg-to-compose:0.8.1') {
         exclude group: 'xerces', module: 'xercesImpl'
