@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'by.overpass'
-version '0.10'
+version '0.11'
 
 repositories {
     mavenCentral()
@@ -54,7 +54,7 @@ publishPlugin {
 tasks {
     patchPluginXml {
         sinceBuild.set("221.6008.13")
-        untilBuild.set("232.7295.16")
+        untilBuild.set("232.9559.34")
     }
 }
 
