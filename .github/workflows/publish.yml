@@ -23,3 +23,8 @@ jobs:
           PRIVATE_KEY_PASSWORD: ${{ secrets.PRIVATE_KEY_PASSWORD }}
           CERTIFICATE_CHAIN: ${{ secrets.CERTIFICATE_CHAIN }}
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+      - name: Attach distribution to latest release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          LATEST_RELEASE_TAG: ${{github.ref_name}}
+        run: gh release upload $LATEST_RELEASE_TAG $(ls build/distributions/svg-to-compose-intellij-*.zip)
