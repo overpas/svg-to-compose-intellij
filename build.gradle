@@ -54,7 +54,7 @@ publishPlugin {
 tasks {
     patchPluginXml {
         sinceBuild.set("221.6008.13")
-        untilBuild.set("232.9559.34")
+        untilBuild.set("232.9921.28")
     }
 }
 
