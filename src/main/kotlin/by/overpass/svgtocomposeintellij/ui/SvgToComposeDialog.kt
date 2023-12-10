@@ -29,7 +29,6 @@ import kotlin.reflect.KMutableProperty0
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class SvgToComposeDialog(
@@ -113,7 +112,7 @@ class SvgToComposeDialog(
         title = "Create Compose Icons from SVG or Android vector drawables"
     }
 
-    override fun createCenterPanel(): JComponent = ui
+    override fun createCenterPanel(): JComponent = myPluginPanel()
 
     override fun getOKAction(): Action = action
 

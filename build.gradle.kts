@@ -31,18 +31,20 @@ dependencies {
     }
     implementation(libs.jewel.int.ui.standalone)
     implementation(libs.jewel.ide.laf.bridge)
+    implementation(libs.jewel.ide.laf.bridge.platform.specific)
+    implementation(libs.jewel.compose.utils)
     testImplementation(libs.junit)
     testImplementation(libs.mockito.kotlin)
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version.set("231.9392.1")
+    version.set(properties["since-build"].toString())
     plugins.set(listOf("java", "Kotlin"))
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(properties["jvm-version"].toString().toInt())
 }
 
 tasks {
@@ -55,11 +57,9 @@ tasks {
         token.set(environment("PUBLISH_TOKEN"))
     }
     patchPluginXml {
-        sinceBuild.set("231.9392.1")
-        untilBuild.set("233.*")
-        changeNotes.set("""
-        Rewrite the plugin in Compose
-      """)
+        sinceBuild.set(project.properties["since-build"].toString())
+        untilBuild.set(project.properties["until-build"].toString())
+        changeNotes.set(project.properties["change-notes"].toString())
     }
     test {
         useJUnit()
