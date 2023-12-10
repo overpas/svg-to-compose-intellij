@@ -16,10 +16,10 @@ class ProperDirValidator(
 
     sealed class Error {
 
-        object Empty : Error()
+        data object Empty : Error()
 
-        object InvalidPath : Error()
+        data object InvalidPath : Error()
 
-        object NotADirectory : Error()
+        data object NotADirectory : Error()
     }
 }
