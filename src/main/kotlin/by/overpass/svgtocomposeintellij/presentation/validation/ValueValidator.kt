@@ -4,7 +4,7 @@ sealed class ValidationResult<in V> {
 
     data object Ok : ValidationResult<Any>()
 
-    data class Error<V>(val value: V) : ValidationResult<V>()
+    data class Error<V>(val error: V) : ValidationResult<V>()
 }
 
 interface ValueValidator<in T, R> {

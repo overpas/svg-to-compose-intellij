@@ -1,6 +1,5 @@
 package by.overpass.svgtocomposeintellij.presentation.validation
 
-import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -8,8 +7,8 @@ import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
 class ProperDirValidatorTest(
-    private val file: File,
-    private val validationResult: ValidationResult<ProperDirValidator.Error>,
+    private val file: String,
+    private val validationResult: ValidationResult<DirError>,
 ) {
 
     companion object {
@@ -18,26 +17,25 @@ class ProperDirValidatorTest(
         @Parameterized.Parameters
         fun data(): Collection<Array<Any>> = listOf(
             arrayOf(
-                File(""),
-                ValidationResult.Error(ProperDirValidator.Error.Empty),
+                "",
+                ValidationResult.Error(DirError.Empty),
             ),
             arrayOf(
-                File("src/test/resources/test_file.txt"),
-                ValidationResult.Error(ProperDirValidator.Error.NotADirectory),
+                "src/test/resources/test_file.txt",
+                ValidationResult.Error(DirError.NotADirectory),
             ),
             arrayOf(
-                File("src/test/resources/error"),
-                ValidationResult.Error(ProperDirValidator.Error.InvalidPath),
+                "src/test/resources/error",
+                ValidationResult.Error(DirError.InvalidPath),
             ),
             arrayOf(
-                File("src/test/resources/"),
+                "src/test/resources/",
                 ValidationResult.Ok,
             ),
         )
     }
 
-    private val stubFile = File("")
-    private val properDirValidator = ProperDirValidator(stubFile)
+    private val properDirValidator = ProperDirValidator
 
     @Test
     fun `test passed directory is validated correctly`() {

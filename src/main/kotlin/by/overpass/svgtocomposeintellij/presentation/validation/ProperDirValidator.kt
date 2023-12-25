@@ -2,24 +2,15 @@ package by.overpass.svgtocomposeintellij.presentation.validation
 
 import java.io.File
 
-class ProperDirValidator(
-    private val stubFile: File,
-) : ValueValidator<File, ProperDirValidator.Error> {
+object ProperDirValidator : ValueValidator<String, DirError> {
 
-    override fun validate(value: File): ValidationResult<Error> =
-        when {
-            value == stubFile || value.path.isBlank() -> ValidationResult.Error(Error.Empty)
-            !value.exists() -> ValidationResult.Error(Error.InvalidPath)
-            !value.isDirectory -> ValidationResult.Error(Error.NotADirectory)
+    override fun validate(value: String): ValidationResult<DirError> {
+        val file = File(value)
+        return when {
+            file.path.isBlank() -> ValidationResult.Error(DirError.Empty)
+            !file.exists() -> ValidationResult.Error(DirError.InvalidPath)
+            !file.isDirectory -> ValidationResult.Error(DirError.NotADirectory)
             else -> ValidationResult.Ok
         }
-
-    sealed class Error {
-
-        data object Empty : Error()
-
-        data object InvalidPath : Error()
-
-        data object NotADirectory : Error()
     }
 }

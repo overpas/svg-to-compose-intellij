@@ -42,6 +42,9 @@ dependencies {
     implementation(libs.jewel.ide.laf.bridge.platform.specific) {
         exclude(group = "org.jetbrains.kotlinx")
     }
+    implementation(libs.compose.multiplatform.file.picker) {
+        exclude(group = "org.jetbrains.kotlinx")
+    }
     testImplementation(libs.junit)
     testImplementation(libs.mockito.kotlin)
 }
