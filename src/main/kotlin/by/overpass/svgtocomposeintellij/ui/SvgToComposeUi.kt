@@ -1,6 +1,11 @@
 package by.overpass.svgtocomposeintellij.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,21 +22,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import by.overpass.svgtocomposeintellij.domain.VectorImageType
+import by.overpass.svgtocomposeintellij.presentation.Error
+import by.overpass.svgtocomposeintellij.presentation.Finished
+import by.overpass.svgtocomposeintellij.presentation.DataInput
 import by.overpass.svgtocomposeintellij.presentation.SvgToComposeViewModel
-import by.overpass.svgtocomposeintellij.presentation.VectorImageType
 import by.overpass.svgtocomposeintellij.presentation.validation.DirError
 import by.overpass.svgtocomposeintellij.presentation.validation.Validatable
 import com.darkrockstudios.libraries.mpfilepicker.DirectoryPicker
 import com.intellij.icons.AllIcons
+import com.intellij.ui.JBColor
+import com.intellij.util.ui.JBUI
 import javax.swing.JComponent
 import org.jetbrains.jewel.bridge.JewelComposePanel
 import org.jetbrains.jewel.bridge.theme.SwingBridgeTheme
+import org.jetbrains.jewel.bridge.toComposeColor
 import org.jetbrains.jewel.foundation.ExperimentalJewelApi
+import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Outline
 import org.jetbrains.jewel.ui.component.Dropdown
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.IconButton
+import org.jetbrains.jewel.ui.component.IndeterminateHorizontalProgressBar
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 
@@ -50,6 +66,87 @@ fun svgToComposePluginPanel(viewModel: SvgToComposeViewModel): JComponent = Jewe
 @Composable
 private fun SvgToComposePlugin(viewModel: SvgToComposeViewModel, modifier: Modifier = Modifier) {
     val state by viewModel.state.collectAsState()
+    when (state) {
+        is DataInput -> DataInputWithProgress(
+            dataInput = state as DataInput,
+            onAccessorNameChanged = viewModel::onAccessorNameChanged,
+            onOutputDirChanged = viewModel::onOutputDirChanged,
+            onVectorImagesDirChanged = viewModel::onVectorImagesDirChanged,
+            onVectorImageTypeChanged = viewModel::onVectorImageTypeChanged,
+            onAllAssetsPropertyNameChanged = viewModel::onAllAssetsPropertyNameChanged,
+            modifier = modifier,
+        )
+        is Error -> GenerationError(
+            error = state as Error,
+            modifier = modifier,
+        )
+        is Finished -> Unit
+    }
+}
+
+@Composable
+private fun DataInputWithProgress(
+    dataInput: DataInput,
+    onAccessorNameChanged: (String) -> Unit,
+    onOutputDirChanged: (String) -> Unit,
+    onVectorImagesDirChanged: (String) -> Unit,
+    onVectorImageTypeChanged: (VectorImageType) -> Unit,
+    onAllAssetsPropertyNameChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        Dimmed(
+            isDimmed = dataInput.isInProgress,
+            modifier = Modifier.fillMaxSize().weight(1f),
+        ) {
+            DataInput(
+                dataInput = dataInput,
+                onAccessorNameChanged = onAccessorNameChanged,
+                onOutputDirChanged = onOutputDirChanged,
+                onVectorImagesDirChanged = onVectorImagesDirChanged,
+                onVectorImageTypeChanged = onVectorImageTypeChanged,
+                onAllAssetsPropertyNameChanged = onAllAssetsPropertyNameChanged,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+        if (dataInput.isInProgress) {
+            IndeterminateHorizontalProgressBar(
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@Composable
+private fun Dimmed(
+    isDimmed: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
+    Box(modifier) {
+        content()
+        if (isDimmed) {
+            Box(
+                modifier = Modifier.fillMaxSize()
+                    .background(JewelTheme.globalColors.paneBackground.copy(alpha = 0.5F))
+                    .disableClickAndRipple(),
+            )
+        }
+    }
+}
+
+@Composable
+private fun DataInput(
+    dataInput: DataInput,
+    onAccessorNameChanged: (String) -> Unit,
+    onOutputDirChanged: (String) -> Unit,
+    onVectorImagesDirChanged: (String) -> Unit,
+    onVectorImageTypeChanged: (VectorImageType) -> Unit,
+    onAllAssetsPropertyNameChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier) {
         Text(
             text = "Accessor name will be used to access the Vector in the code like `MyIconPack.IconName` or " +
@@ -58,31 +155,31 @@ private fun SvgToComposePlugin(viewModel: SvgToComposeViewModel, modifier: Modif
         Spacer(Modifier.height(8.dp))
         StringPropertyRow(
             propertyName = "Accessor name",
-            value = state.accessorName,
-            onValueChanged = viewModel::onAccessorNameChanged,
+            value = dataInput.accessorName,
+            onValueChanged = onAccessorNameChanged,
         )
         Spacer(Modifier.height(8.dp))
         BrowseDirRow(
             propertyName = "Output directory",
-            dir = state.outputDir,
-            onDirChanged = viewModel::onOutputDirChanged,
+            dir = dataInput.outputDir,
+            onDirChanged = onOutputDirChanged,
         )
         Spacer(Modifier.height(8.dp))
         BrowseDirRow(
             propertyName = "Vector images directory:",
-            dir = state.vectorImagesDir,
-            onDirChanged = viewModel::onVectorImagesDirChanged,
+            dir = dataInput.vectorImagesDir,
+            onDirChanged = onVectorImagesDirChanged,
         )
         Spacer(Modifier.height(8.dp))
         VectorImageTypeRow(
-            vectorImageType = state.vectorImageType,
-            onVectorImageTypeChanded = viewModel::onVectorImageTypeChanged,
+            vectorImageType = dataInput.vectorImageType,
+            onVectorImageTypeChanded = onVectorImageTypeChanged,
         )
         Spacer(Modifier.height(8.dp))
         StringPropertyRow(
             propertyName = "All assets property name",
-            value = state.allAssetsPropertyName,
-            onValueChanged = viewModel::onAllAssetsPropertyNameChanged,
+            value = dataInput.allAssetsPropertyName,
+            onValueChanged = onAllAssetsPropertyNameChanged,
         )
     }
 }
@@ -232,5 +329,15 @@ private fun StringPropertyRow(
                 modifier = Modifier.fillMaxWidth(),
             )
         }
+    }
+}
+
+@Composable
+private fun GenerationError(error: Error, modifier: Modifier = Modifier) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier,
+    ) {
+        Text(error.throwable.toString())
     }
 }

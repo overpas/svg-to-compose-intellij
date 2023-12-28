@@ -1,5 +1,7 @@
 package by.overpass.svgtocomposeintellij.ui
 
+import by.overpass.svgtocomposeintellij.presentation.Finished
+import by.overpass.svgtocomposeintellij.presentation.SvgToComposeState
 import by.overpass.svgtocomposeintellij.presentation.SvgToComposeViewModel
 import by.overpass.svgtocomposeintellij.presentation.isValid
 import com.intellij.openapi.project.Project
@@ -14,6 +16,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.jetbrains.skiko.MainUIDispatcher
 
 private const val DEFAULT_DIALOG_CONTENT_WIDTH = 820
 private const val DEFAULT_DIALOG_CONTENT_HEIGHT = 300
@@ -23,18 +26,27 @@ class SvgToComposeDialog(
     private val viewModel: SvgToComposeViewModel,
 ) : DialogWrapper(project, false) {
 
-    private val coroutineScope = CoroutineScope(SupervisorJob())
+    private val coroutineScope = CoroutineScope(MainUIDispatcher + SupervisorJob())
 
-    private val action = GenerateAction("Generate")
+    private val generateAction = GenerateAction("Generate")
 
     init {
         init()
         title = "Generate Compose Icons From SVG Or Android Vector Drawables"
         viewModel.state
-            .onEach { model ->
-                action.isEnabled = model.isValid
-            }
+            .onEach(::processState)
             .launchIn(coroutineScope)
+    }
+
+    private fun processState(state: SvgToComposeState) {
+        generateAction.isEnabled = state.isValid
+        if (state is Finished) {
+            handleFinished()
+        }
+    }
+
+    private fun handleFinished() {
+        close(OK_EXIT_CODE, true)
     }
 
     override fun createCenterPanel(): JComponent =
@@ -42,18 +54,18 @@ class SvgToComposeDialog(
             preferredSize = JBUI.size(Dimension(DEFAULT_DIALOG_CONTENT_WIDTH, DEFAULT_DIALOG_CONTENT_HEIGHT))
         }
 
-    override fun getOKAction(): Action = action
+    override fun getOKAction(): Action = generateAction
 
     override fun dispose() {
         super.dispose()
         coroutineScope.cancel()
+        viewModel.onCleared()
     }
 
     private inner class GenerateAction(name: String) : DialogWrapperAction(name) {
 
         override fun doAction(e: ActionEvent?) {
             viewModel.generate()
-            close(OK_EXIT_CODE, true)
         }
     }
 }

@@ -6,26 +6,21 @@ interface SvgToComposeDataProcessor {
 
     operator fun invoke(data: SvgToComposeData): SvgToComposeData
 
-    companion object {
+    companion object : SvgToComposeDataProcessor {
 
-        operator fun invoke(): SvgToComposeDataProcessor = SvgToComposeDataProcessorImpl()
-    }
-}
+        private val pathRegex = ".*[/\\\\](kotlin|java)[/\\\\](.*)".toRegex()
 
-private class SvgToComposeDataProcessorImpl : SvgToComposeDataProcessor {
-
-    private val pathRegex = ".*[/\\\\](kotlin|java)[/\\\\](.*)".toRegex()
-
-    override operator fun invoke(data: SvgToComposeData): SvgToComposeData {
-        val initialPath = data.outputDir.path
-        val pkg = pathRegex.find(initialPath)?.groupValues?.get(2)
-        return if (pkg.isNullOrEmpty()) {
-            data
-        } else {
-            val newPath = initialPath.removeSuffix(pkg)
-            val newPackage = pkg.replace("[/\\\\]".toRegex(), ".")
-            val outputDir = File(newPath)
-            data.copy(outputDir = outputDir, applicationIconPackage = newPackage)
+        override operator fun invoke(data: SvgToComposeData): SvgToComposeData {
+            val initialPath = data.outputDir.path
+            val pkg = pathRegex.find(initialPath)?.groupValues?.get(2)
+            return if (pkg.isNullOrEmpty()) {
+                data
+            } else {
+                val newPath = initialPath.removeSuffix(pkg)
+                val newPackage = pkg.replace("[/\\\\]".toRegex(), ".")
+                val outputDir = File(newPath)
+                data.copy(outputDir = outputDir, applicationIconPackage = newPackage)
+            }
         }
     }
 }
