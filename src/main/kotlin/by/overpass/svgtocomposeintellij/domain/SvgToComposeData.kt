@@ -1,6 +1,5 @@
 package by.overpass.svgtocomposeintellij.domain
 
-import br.com.devsrsouza.svg2compose.VectorType
 import java.io.File
 
 data class SvgToComposeData(
@@ -8,6 +7,6 @@ data class SvgToComposeData(
     val accessorName: String,
     val outputDir: File,
     val vectorsDir: File,
-    val vectorImageType: VectorType,
+    val vectorImageType: VectorImageType,
     val allAssetsPropertyName: String,
 )

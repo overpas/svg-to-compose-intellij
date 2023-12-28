@@ -1,0 +1,31 @@
+[versions]
+kotlin = "1.9.21"
+intellij = "1.16.1"
+detekt = "1.23.4"
+junit = "4.13.2"
+kotlin-coroutines = "1.7.3"
+svg-to-compose = "0.8.1"
+mockito-kotlin = "5.0.0"
+jewel = "0.12.0"
+jewel-laf-bridge = "0.12.0-ij-232"
+jewel-compose-utils = "0.6.3"
+compose-desktop = "1.5.11"
+file-picker = "3.1.0"
+
+[libraries]
+kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
+kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
+svg-to-compose = { group = "com.github.DevSrSouza", name = "svg-to-compose", version.ref = "svg-to-compose" }
+jewel-int-ui-standalone = { group = "org.jetbrains.jewel", name = "jewel-int-ui-standalone", version.ref = "jewel" }
+jewel-ide-laf-bridge-platform-specific = { group = "org.jetbrains.jewel", name = "jewel-ide-laf-bridge-platform-specific", version.ref = "jewel-laf-bridge" }
+jewel-ide-laf-bridge = { group = "org.jetbrains.jewel", name = "jewel-ide-laf-bridge", version.ref = "jewel-laf-bridge" }
+jewel-compose-utils = { group = "org.jetbrains.jewel", name = "jewel-compose-utils", version.ref = "jewel-compose-utils" }
+compose-multiplatform-file-picker = { group = "com.darkrockstudios", name = "mpfilepicker", version.ref = "file-picker" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
+
+[plugins]
+intellij = { id = "org.jetbrains.intellij", version.ref = "intellij" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+compose-desktop = { id = "org.jetbrains.compose", version.ref = "compose-desktop" }

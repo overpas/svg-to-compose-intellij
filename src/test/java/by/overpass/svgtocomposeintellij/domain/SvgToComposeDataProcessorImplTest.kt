@@ -1,13 +1,12 @@
 package by.overpass.svgtocomposeintellij.domain
 
-import br.com.devsrsouza.svg2compose.VectorType
+import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Test
-import java.io.File
 
 class SvgToComposeDataProcessorImplTest {
 
-    private val processor = SvgToComposeDataProcessor()
+    private val processor = SvgToComposeDataProcessor
 
     @Test
     fun `test data unchanged when package is empty`() {
@@ -16,7 +15,7 @@ class SvgToComposeDataProcessorImplTest {
             accessorName = "",
             outputDir = File(""),
             vectorsDir = File(""),
-            vectorImageType = VectorType.SVG,
+            vectorImageType = VectorImageType.SVG,
             allAssetsPropertyName = "",
         )
 
@@ -30,7 +29,7 @@ class SvgToComposeDataProcessorImplTest {
             accessorName = "",
             outputDir = File("C:/Users/User/Projects/Project/src/kotlin/com/example/icons"),
             vectorsDir = File(""),
-            vectorImageType = VectorType.SVG,
+            vectorImageType = VectorImageType.SVG,
             allAssetsPropertyName = "",
         )
         val expected = SvgToComposeData(
@@ -38,7 +37,7 @@ class SvgToComposeDataProcessorImplTest {
             accessorName = "",
             outputDir = File("C:/Users/User/Projects/Project/src/kotlin"),
             vectorsDir = File(""),
-            vectorImageType = VectorType.SVG,
+            vectorImageType = VectorImageType.SVG,
             allAssetsPropertyName = "",
         )
 

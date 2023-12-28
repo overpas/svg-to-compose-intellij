@@ -5,7 +5,7 @@ import org.junit.Test
 
 class CantBeEmptyStringValidatorTest {
 
-    private val validator = CantBeEmptyStringValidator("prop")
+    private val validator = CantBeEmptyStringValidator
 
     @Test
     fun `test not empty string validator returns result ok`() {
@@ -18,6 +18,6 @@ class CantBeEmptyStringValidatorTest {
     fun `test not empty string validator returns result error`() {
         val result = validator.validate("")
 
-        assertEquals(ValidationResult.Error("prop can't be empty"), result)
+        assertEquals(ValidationResult.Error(Unit), result)
     }
 }

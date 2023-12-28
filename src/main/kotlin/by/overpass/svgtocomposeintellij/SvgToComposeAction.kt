@@ -1,14 +1,14 @@
 package by.overpass.svgtocomposeintellij
 
-import by.overpass.svgtocomposeintellij.data.SvgToComposeTaskFactoryImpl
+import by.overpass.svgtocomposeintellij.data.DataProcessingSvgIconsSvgIconsGenerator
 import by.overpass.svgtocomposeintellij.domain.SvgToComposeDataProcessor
-import by.overpass.svgtocomposeintellij.domain.SvgToComposeService
-import by.overpass.svgtocomposeintellij.presentation.SvgToComposeWizardViewModel
+import by.overpass.svgtocomposeintellij.presentation.SvgToComposeViewModelImpl
+import by.overpass.svgtocomposeintellij.presentation.validation.CantBeEmptyStringValidator
+import by.overpass.svgtocomposeintellij.presentation.validation.ProperDirValidator
 import by.overpass.svgtocomposeintellij.ui.SvgToComposeDialog
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.openapi.progress.ProgressManager
 import com.intellij.openapi.util.IconLoader
 import java.io.File
 
@@ -24,16 +24,11 @@ class SvgToComposeAction : AnAction() {
     override fun actionPerformed(event: AnActionEvent) {
         SvgToComposeDialog(
             event.project ?: throw IllegalStateException(MESSAGE_PROJECT_NULL),
-            SvgToComposeWizardViewModel(
-                SvgToComposeService(
-                    ProgressManager.getInstance(),
-                    SvgToComposeTaskFactoryImpl(
-                        event.project
-                            ?: throw IllegalStateException(MESSAGE_PROJECT_NULL),
-                        SvgToComposeDataProcessor(),
-                    )
-                ),
-                event.targetDir,
+            SvgToComposeViewModelImpl(
+                targetDir = event.targetDir ?: File(""),
+                svgIconsGenerator = DataProcessingSvgIconsSvgIconsGenerator(SvgToComposeDataProcessor),
+                nonStringEmptyValidator = CantBeEmptyStringValidator,
+                directoryValidator = ProperDirValidator,
             ),
         ).show()
     }

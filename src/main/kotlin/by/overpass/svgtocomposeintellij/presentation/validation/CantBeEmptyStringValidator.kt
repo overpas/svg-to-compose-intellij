@@ -1,12 +1,10 @@
 package by.overpass.svgtocomposeintellij.presentation.validation
 
-class CantBeEmptyStringValidator(
-    private val propertyName: String,
-) : ValueValidator<String?, String> {
+object CantBeEmptyStringValidator : ValueValidator<String, Unit> {
 
-    override fun validate(value: String?): ValidationResult<String> =
-        if (value.isNullOrBlank()) {
-            ValidationResult.Error("$propertyName can't be empty")
+    override fun validate(value: String): ValidationResult<Unit> =
+        if (value.isBlank()) {
+            ValidationResult.Error(Unit)
         } else {
             ValidationResult.Ok
         }
