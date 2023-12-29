@@ -8,38 +8,14 @@ import by.overpass.svgtocomposeintellij.presentation.validation.Validatable
 import by.overpass.svgtocomposeintellij.presentation.validation.ValidationResult
 import by.overpass.svgtocomposeintellij.presentation.validation.ValueValidator
 import java.io.File
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-sealed interface SvgToComposeState
-
-data class DataInput(
-    val accessorName: Validatable<String, Unit> = Validatable(value = "MyIconPack"),
-    val outputDir: Validatable<String, DirError> = Validatable(value = "", isValid = false),
-    val vectorImagesDir: Validatable<String, DirError> = Validatable(value = "", isValid = false),
-    val vectorImageType: VectorImageType = VectorImageType.SVG,
-    val allAssetsPropertyName: Validatable<String, Unit> = Validatable(value = "AllIcons"),
-    val isInProgress: Boolean = false,
-) : SvgToComposeState
-
-data class Error(
-    val throwable: Throwable,
-) : SvgToComposeState
-
-data object Finished : SvgToComposeState
-
-val SvgToComposeState.isValid: Boolean
-    get() = if (this is DataInput) {
-        accessorName.isValid && outputDir.isValid && vectorImagesDir.isValid && allAssetsPropertyName.isValid
-    } else {
-        false
-    }
 
 interface SvgToComposeViewModel {
 
@@ -65,9 +41,10 @@ class SvgToComposeViewModelImpl(
     private val svgIconsGenerator: SvgIconsGenerator,
     private val nonStringEmptyValidator: ValueValidator<String, Unit>,
     private val directoryValidator: ValueValidator<String, DirError>,
+    dispatcher: CoroutineDispatcher,
 ) : SvgToComposeViewModel {
 
-    private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+    private val coroutineScope = CoroutineScope(dispatcher + SupervisorJob())
 
     override val state = MutableStateFlow<SvgToComposeState>(
         DataInput(

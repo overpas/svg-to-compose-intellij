@@ -47,6 +47,8 @@ dependencies {
     }
     testImplementation(libs.junit)
     testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.turbine)
 }
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/

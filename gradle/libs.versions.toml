@@ -11,6 +11,7 @@ jewel-laf-bridge = "0.12.0-ij-232"
 jewel-compose-utils = "0.6.3"
 compose-desktop = "1.5.11"
 file-picker = "3.1.0"
+turbine = "1.0.0"
 
 [libraries]
 kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
@@ -23,7 +24,8 @@ jewel-compose-utils = { group = "org.jetbrains.jewel", name = "jewel-compose-uti
 compose-multiplatform-file-picker = { group = "com.darkrockstudios", name = "mpfilepicker", version.ref = "file-picker" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
-
+kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 [plugins]
 intellij = { id = "org.jetbrains.intellij", version.ref = "intellij" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

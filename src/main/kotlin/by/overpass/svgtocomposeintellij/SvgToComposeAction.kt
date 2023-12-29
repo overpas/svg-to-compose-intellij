@@ -11,6 +11,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.util.IconLoader
 import java.io.File
+import kotlinx.coroutines.Dispatchers
 
 private const val MESSAGE_PROJECT_NULL = "Can't start Svg2Compose UI: the project is null"
 
@@ -29,6 +30,7 @@ class SvgToComposeAction : AnAction() {
                 svgIconsGenerator = DataProcessingSvgIconsSvgIconsGenerator(SvgToComposeDataProcessor),
                 nonStringEmptyValidator = CantBeEmptyStringValidator,
                 directoryValidator = ProperDirValidator,
+                dispatcher = Dispatchers.Default,
             ),
         ).show()
     }
