@@ -2,6 +2,7 @@ package by.overpass.svgtocomposeintellij
 
 import by.overpass.svgtocomposeintellij.data.DataProcessingSvgIconsSvgIconsGenerator
 import by.overpass.svgtocomposeintellij.domain.SvgToComposeDataProcessor
+import by.overpass.svgtocomposeintellij.domain.VectorImageTypeDetector
 import by.overpass.svgtocomposeintellij.presentation.SvgToComposeViewModelImpl
 import by.overpass.svgtocomposeintellij.presentation.validation.CantBeEmptyStringValidator
 import by.overpass.svgtocomposeintellij.presentation.validation.ProperDirValidator
@@ -28,6 +29,7 @@ class SvgToComposeAction : AnAction() {
             SvgToComposeViewModelImpl(
                 targetDir = event.targetDir ?: File(""),
                 svgIconsGenerator = DataProcessingSvgIconsSvgIconsGenerator(SvgToComposeDataProcessor),
+                vectorImageTypeDetector = VectorImageTypeDetector,
                 nonStringEmptyValidator = CantBeEmptyStringValidator,
                 directoryValidator = ProperDirValidator,
                 dispatcher = Dispatchers.Default,

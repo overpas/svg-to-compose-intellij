@@ -3,6 +3,7 @@ package by.overpass.svgtocomposeintellij.presentation
 import by.overpass.svgtocomposeintellij.domain.SvgIconsGenerator
 import by.overpass.svgtocomposeintellij.domain.SvgToComposeData
 import by.overpass.svgtocomposeintellij.domain.VectorImageType
+import by.overpass.svgtocomposeintellij.domain.VectorImageTypeDetector
 import by.overpass.svgtocomposeintellij.presentation.validation.DirError
 import by.overpass.svgtocomposeintellij.presentation.validation.Validatable
 import by.overpass.svgtocomposeintellij.presentation.validation.ValidationResult
@@ -39,6 +40,7 @@ interface SvgToComposeViewModel {
 class SvgToComposeViewModelImpl(
     targetDir: File,
     private val svgIconsGenerator: SvgIconsGenerator,
+    private val vectorImageTypeDetector: VectorImageTypeDetector,
     private val nonStringEmptyValidator: ValueValidator<String, Unit>,
     private val directoryValidator: ValueValidator<String, DirError>,
     dispatcher: CoroutineDispatcher,
@@ -92,12 +94,20 @@ class SvgToComposeViewModelImpl(
                     value = vectorImagesDir,
                     isValid = validationResult == ValidationResult.Ok,
                     error = when (validationResult) {
-                        is ValidationResult.Ok -> null
+                        is ValidationResult.Ok -> {
+                            detectVectorImagesType(vectorImagesDir)
+                            null
+                        }
                         is ValidationResult.Error -> validationResult.error
                     },
                 ),
             )
         }
+    }
+
+    private fun detectVectorImagesType(vectorImagesDir: String) {
+        vectorImageTypeDetector.detect(vectorImagesDir)
+            ?.let(::onVectorImageTypeChanged)
     }
 
     override fun onVectorImageTypeChanged(vectorImageType: VectorImageType) {
