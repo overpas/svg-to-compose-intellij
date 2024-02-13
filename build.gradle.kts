@@ -24,9 +24,6 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.kotlin.reflect) {
-        exclude(group = "org.jetbrains.kotlinx")
-    }
     implementation(libs.svg.to.compose) {
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "xerces", module = "xercesImpl")
