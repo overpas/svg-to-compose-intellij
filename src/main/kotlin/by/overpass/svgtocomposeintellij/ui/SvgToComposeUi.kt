@@ -28,9 +28,11 @@ import by.overpass.svgtocomposeintellij.presentation.validation.DirError
 import by.overpass.svgtocomposeintellij.presentation.validation.Validatable
 import com.darkrockstudios.libraries.mpfilepicker.DirectoryPicker
 import com.intellij.icons.AllIcons
+import com.intellij.ui.JBColor
 import javax.swing.JComponent
 import org.jetbrains.jewel.bridge.JewelComposePanel
 import org.jetbrains.jewel.bridge.theme.SwingBridgeTheme
+import org.jetbrains.jewel.bridge.toComposeColor
 import org.jetbrains.jewel.foundation.ExperimentalJewelApi
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Outline
@@ -47,9 +49,13 @@ private const val WEIGHT_RIGHT = 3f
 @OptIn(ExperimentalJewelApi::class)
 fun svgToComposePluginPanel(viewModel: SvgToComposeViewModel): JComponent = JewelComposePanel {
     SwingBridgeTheme {
+        val bgColor by remember(JBColor.PanelBackground.rgb) {
+            mutableStateOf(JBColor.PanelBackground.toComposeColor())
+        }
         SvgToComposePlugin(
             viewModel = viewModel,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .background(bgColor),
         )
     }
 }
