@@ -1,4 +1,4 @@
-name: Detekt
+name: Build
 
 on:
   push:
@@ -9,9 +9,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  detekt:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Detekt
-        run: ./gradlew detekt
+      - name: Build
+        run: ./gradlew build

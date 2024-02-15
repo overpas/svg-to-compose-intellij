@@ -2,9 +2,6 @@ package by.overpass.svgtocomposeintellij.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -22,20 +18,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import by.overpass.svgtocomposeintellij.domain.VectorImageType
+import by.overpass.svgtocomposeintellij.presentation.DataInput
 import by.overpass.svgtocomposeintellij.presentation.Error
 import by.overpass.svgtocomposeintellij.presentation.Finished
-import by.overpass.svgtocomposeintellij.presentation.DataInput
 import by.overpass.svgtocomposeintellij.presentation.SvgToComposeViewModel
 import by.overpass.svgtocomposeintellij.presentation.validation.DirError
 import by.overpass.svgtocomposeintellij.presentation.validation.Validatable
 import com.darkrockstudios.libraries.mpfilepicker.DirectoryPicker
 import com.intellij.icons.AllIcons
 import com.intellij.ui.JBColor
-import com.intellij.util.ui.JBUI
 import javax.swing.JComponent
 import org.jetbrains.jewel.bridge.JewelComposePanel
 import org.jetbrains.jewel.bridge.theme.SwingBridgeTheme
@@ -56,9 +49,13 @@ private const val WEIGHT_RIGHT = 3f
 @OptIn(ExperimentalJewelApi::class)
 fun svgToComposePluginPanel(viewModel: SvgToComposeViewModel): JComponent = JewelComposePanel {
     SwingBridgeTheme {
+        val bgColor by remember(JBColor.PanelBackground.rgb) {
+            mutableStateOf(JBColor.PanelBackground.toComposeColor())
+        }
         SvgToComposePlugin(
             viewModel = viewModel,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .background(bgColor),
         )
     }
 }
