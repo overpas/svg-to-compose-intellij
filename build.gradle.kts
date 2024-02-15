@@ -29,7 +29,23 @@ dependencies {
         exclude(group = "xerces", module = "xercesImpl")
         exclude(group = "xml-apis", module = "xml-apis")
     }
-    implementation(compose.desktop.currentOs) {
+    implementation(compose.desktop.macos_x64) {
+        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = "org.jetbrains.compose.material")
+    }
+    implementation(compose.desktop.macos_arm64) {
+        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = "org.jetbrains.compose.material")
+    }
+    implementation(compose.desktop.windows_x64) {
+        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = "org.jetbrains.compose.material")
+    }
+    implementation(compose.desktop.linux_x64) {
+        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = "org.jetbrains.compose.material")
+    }
+    implementation(compose.desktop.linux_arm64) {
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.jetbrains.compose.material")
     }
