@@ -33,10 +33,7 @@ dependencies {
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "org.jetbrains.compose.material")
     }
-    implementation(libs.jewel.ide.laf.bridge) {
-        exclude(group = "org.jetbrains.kotlinx")
-    }
-    implementation(libs.jewel.ide.laf.bridge.platform.specific) {
+    implementation(libs.jewel.ide.laf.bridge.get232()) {
         exclude(group = "org.jetbrains.kotlinx")
     }
     implementation(libs.compose.multiplatform.file.picker) {
