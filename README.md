@@ -1,6 +1,6 @@
 # svg-to-compose-intellij
-[![Detekt](https://github.com/overpas/svg-to-compose-intellij/actions/workflows/detekt.yml/badge.svg)](https://github.com/overpas/svg-to-compose-intellij/actions/workflows/detekt.yml)
-[![Test](https://github.com/overpas/svg-to-compose-intellij/actions/workflows/test.yml/badge.svg)](https://github.com/overpas/svg-to-compose-intellij/actions/workflows/test.yml)
+[![Build](https://github.com/overpas/svg-to-compose-intellij/actions/workflows/build.yml/badge.svg)](https://github.com/overpas/svg-to-compose-intellij/actions/workflows/build.yml)
+[![Check IDE compatibility](https://github.com/overpas/svg-to-compose-intellij/actions/workflows/verify.yml/badge.svg)](https://github.com/overpas/svg-to-compose-intellij/actions/workflows/verify.yml)
 
 A simple Android Studio plugin to generate Jetpack Compose ImageVector icons. In fact, it's a wrapper around the [svg-to-compose](https://github.com/DevSrSouza/svg-to-compose) tool.
 
