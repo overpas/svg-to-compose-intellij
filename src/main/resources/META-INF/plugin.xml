@@ -23,10 +23,12 @@
         <!-- Add your extensions here -->
     </extensions>
 
+    <resource-bundle>messages.Bundle</resource-bundle>
+
     <actions>
         <!-- Add your actions here -->
-        <action id="by.overpass.svgtocomposeintellij.SvgToComposeAction"
-                class="by.overpass.svgtocomposeintellij.SvgToComposeAction"
+        <action id="by.overpass.svgtocomposeintellij.generator.SvgToComposeAction"
+                class="by.overpass.svgtocomposeintellij.generator.SvgToComposeAction"
                 text="Jetpack Compose ImageVector"
                 description="Create Compose ImageVector from SVG or XML drawable">
             <add-to-group group-id="NewGroup" anchor="after" relative-to-action="Kotlin.NewFile"/>

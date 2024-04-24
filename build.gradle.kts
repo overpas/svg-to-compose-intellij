@@ -29,25 +29,17 @@ dependencies {
         exclude(group = "xerces", module = "xercesImpl")
         exclude(group = "xml-apis", module = "xml-apis")
     }
-    implementation(compose.desktop.macos_x64) {
-        exclude(group = "org.jetbrains.kotlinx")
-        exclude(group = "org.jetbrains.compose.material")
-    }
-    implementation(compose.desktop.macos_arm64) {
-        exclude(group = "org.jetbrains.kotlinx")
-        exclude(group = "org.jetbrains.compose.material")
-    }
-    implementation(compose.desktop.windows_x64) {
-        exclude(group = "org.jetbrains.kotlinx")
-        exclude(group = "org.jetbrains.compose.material")
-    }
-    implementation(compose.desktop.linux_x64) {
-        exclude(group = "org.jetbrains.kotlinx")
-        exclude(group = "org.jetbrains.compose.material")
-    }
-    implementation(compose.desktop.linux_arm64) {
-        exclude(group = "org.jetbrains.kotlinx")
-        exclude(group = "org.jetbrains.compose.material")
+    listOf(
+        compose.desktop.macos_x64,
+        compose.desktop.macos_arm64,
+        compose.desktop.windows_x64,
+        compose.desktop.linux_x64,
+        compose.desktop.linux_arm64,
+    ).forEach { artifact ->
+        implementation(artifact) {
+            exclude(group = "org.jetbrains.kotlinx")
+            exclude(group = "org.jetbrains.compose.material")
+        }
     }
     implementation(libs.jewel.ide.laf.bridge.get232()) {
         exclude(group = "org.jetbrains.kotlinx")
