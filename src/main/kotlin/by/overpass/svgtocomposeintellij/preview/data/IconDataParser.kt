@@ -99,6 +99,8 @@ class KotlinFileIconDataParser(
                 imageVector = imageVector,
             )
         }
+    }.onFailure {
+        it.printStackTrace()
     }
 
     private fun getIconName(text: String): String {
@@ -137,9 +139,13 @@ class KotlinFileIconDataParser(
     @Suppress("MagicNumber")
     private fun createBuilderWithParams(namedParams: List<NamedParams>): ImageVector.Builder {
         val builderClass = ImageVector.Builder::class.java
-        val builderConstructor = builderClass.declaredConstructors[3].apply {
-            isAccessible = true
-        }
+        val builderConstructor = builderClass.declaredConstructors
+            .find { constructor ->
+                constructor.parameterCount == 8 && Modifier.isPrivate(constructor.modifiers)
+            }!!
+            .apply {
+                isAccessible = true
+            }
         val newInstance = builderConstructor.newInstance(
             namedParams.find { it.name == "name" }.getStringNameOrDefault(DefaultGroupName),
             namedParams.find { it.name == "defaultWidth" }?.getFloatValue()!!,
