@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.compose.multiplatform.file.picker) {
         exclude(group = "org.jetbrains.kotlinx")
     }
+    testImplementation(kotlin("test"))
     testImplementation(libs.junit)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.kotlin.coroutines.test)
