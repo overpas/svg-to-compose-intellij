@@ -104,7 +104,9 @@ class KotlinFileIconDataParser(
     }
 
     private fun getIconName(text: String): String {
-        return imageVectorDeclarationPattern.find(text)?.groupValues?.get(2)
+        return imageVectorDeclarationPattern.find(text)
+            ?.groupValues
+            ?.get(2)
             ?: throw IllegalStateException("Failed to parse icon name")
     }
 

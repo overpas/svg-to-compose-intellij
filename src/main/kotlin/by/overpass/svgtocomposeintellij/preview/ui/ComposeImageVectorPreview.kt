@@ -1,10 +1,15 @@
 package by.overpass.svgtocomposeintellij.preview.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,16 +35,21 @@ fun ComposeImageVectorPreview(viewModel: ComposeImageVectorPreviewViewModel, mod
     val bgColor by remember(JBColor.PanelBackground.rgb) {
         mutableStateOf(JBColor.PanelBackground.toComposeColor())
     }
-    Box(
-        modifier = modifier.background(color = bgColor),
+    PreviewContent(
+        modifier = modifier.background(color = bgColor)
+            .padding(8.dp),
     ) {
         val state by viewModel.state.collectAsState()
         when (val theState = state) {
             is ComposeImageVectorPreviewState.Rendering -> {
-                PreviewRendering(Modifier.fillMaxSize())
+                PreviewRendering(
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
             is ComposeImageVectorPreviewState.Error -> {
-                PreviewError(Modifier.fillMaxSize())
+                PreviewError(
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
             is ComposeImageVectorPreviewState.Icon -> {
                 PreviewIcon(
@@ -53,30 +63,44 @@ fun ComposeImageVectorPreview(viewModel: ComposeImageVectorPreviewViewModel, mod
 }
 
 @Composable
-private fun PreviewRendering(modifier: Modifier = Modifier) {
-    PreviewContent(
-        label = Bundle.message("preview_state_progress"),
+private fun PreviewRendering(
+    modifier: Modifier = Modifier,
+) {
+    Column(
         modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.weight(1f)
+                .fillMaxWidth()
                 .padding(32.dp),
+        )
+        Text(
+            text = Bundle.message("preview_state_progress"),
+            style = Typography.h2TextStyle(),
         )
     }
 }
 
 @Composable
-private fun PreviewError(modifier: Modifier = Modifier) {
-    PreviewContent(
-        label = Bundle.message("preview_state_error"),
+private fun PreviewError(
+    modifier: Modifier = Modifier,
+) {
+    Column(
         modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
             resource = "general/error.svg",
             contentDescription = Bundle.message("preview_state_error_content_description"),
             iconClass = AllIcons::class.java,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.weight(1f)
+                .fillMaxWidth()
                 .padding(32.dp),
+        )
+        Text(
+            text = Bundle.message("preview_state_error"),
+            style = Typography.h2TextStyle(),
         )
     }
 }
@@ -87,38 +111,48 @@ private fun PreviewIcon(
     imageVector: ImageVector,
     modifier: Modifier = Modifier,
 ) {
-    PreviewContent(
-        label = iconName,
+    Column(
         modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
             imageVector = imageVector,
             contentDescription = iconName,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        )
+        Text(
+            text = iconName,
+            style = Typography.h2TextStyle(),
         )
     }
 }
 
 @Composable
 private fun PreviewContent(
-    label: String,
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .padding(bottom = 8.dp, top = 8.dp),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Box(
-            modifier = Modifier.weight(1f),
-            contentAlignment = Alignment.Center,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
         ) {
-            content()
+            Icon(
+                resource = "general/notificationWarning.svg",
+                contentDescription = Bundle.message("preview_warning_icon_content_description"),
+                iconClass = AllIcons::class.java,
+                modifier = Modifier.size(16.dp)
+            )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = Bundle.message("preview_warning_text"),
+            )
         }
-        Text(
-            text = label,
-            style = Typography.h2TextStyle(),
-        )
+        content()
     }
 }

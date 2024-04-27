@@ -15,8 +15,17 @@ jobs:
         os:
           - macos-latest
           - ubuntu-latest
+        jdk:
+          - zulu
+          - corretto
+          - adopt
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: ${{ matrix.jdk }}
+          java-version: 17
       - name: Build
         run: ./gradlew build

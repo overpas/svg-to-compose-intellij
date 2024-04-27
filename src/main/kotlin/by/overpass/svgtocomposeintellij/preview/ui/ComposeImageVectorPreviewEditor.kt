@@ -3,10 +3,8 @@ package by.overpass.svgtocomposeintellij.preview.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Modifier
 import by.overpass.svgtocomposeintellij.Bundle
-import by.overpass.svgtocomposeintellij.preview.data.IconDataParser
 import by.overpass.svgtocomposeintellij.preview.presentation.ComposeImageVectorPreviewIntent
 import by.overpass.svgtocomposeintellij.preview.presentation.ComposeImageVectorPreviewViewModel
-import by.overpass.svgtocomposeintellij.preview.presentation.ComposeImageVectorPreviewViewModelImpl
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorState
 import com.intellij.openapi.util.UserDataHolderBase
@@ -15,24 +13,17 @@ import java.awt.Dimension
 import java.beans.PropertyChangeListener
 import javax.swing.JComponent
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import org.jetbrains.jewel.bridge.JewelComposePanel
 import org.jetbrains.jewel.bridge.theme.SwingBridgeTheme
 import org.jetbrains.jewel.foundation.ExperimentalJewelApi
-import org.jetbrains.skiko.MainUIDispatcher
 
 private const val DEFAULT_WINDOW_DIMENSION = 400
 
 class ComposeImageVectorPreviewEditor(
-    iconDataParser: IconDataParser,
+    private val viewModel: ComposeImageVectorPreviewViewModel,
+    private val coroutineScope: CoroutineScope,
 ) : FileEditor, UserDataHolderBase() {
-
-    private val coroutineScope = CoroutineScope(MainUIDispatcher + SupervisorJob())
-    private val viewModel: ComposeImageVectorPreviewViewModel = ComposeImageVectorPreviewViewModelImpl(
-        coroutineScope = coroutineScope,
-        iconDataParser = iconDataParser,
-    )
 
     @OptIn(ExperimentalJewelApi::class)
     private val component = JewelComposePanel {

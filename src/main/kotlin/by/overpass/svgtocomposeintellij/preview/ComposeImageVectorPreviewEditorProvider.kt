@@ -1,7 +1,9 @@
 package by.overpass.svgtocomposeintellij.preview
 
+import by.overpass.svgtocomposeintellij.Bundle
 import by.overpass.svgtocomposeintellij.preview.data.KotlinFileIconDataParser
 import by.overpass.svgtocomposeintellij.preview.data.imageVectorDeclarationPattern
+import by.overpass.svgtocomposeintellij.preview.presentation.ComposeImageVectorPreviewViewModelImpl
 import by.overpass.svgtocomposeintellij.preview.ui.ComposeImageVectorPreviewEditor
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorPolicy
@@ -12,6 +14,9 @@ import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import org.jetbrains.skiko.MainUIDispatcher
 
 class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
 
@@ -21,15 +26,20 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
 
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {
         val textEditor = TextEditorProvider.getInstance().createEditor(project, file) as TextEditor
+        val coroutineScope = CoroutineScope(MainUIDispatcher + SupervisorJob())
         return TextEditorWithPreview(
             textEditor,
             ComposeImageVectorPreviewEditor(
-                KotlinFileIconDataParser(
-                    file.toNioPath()
-                        .toFile(),
-                )
+                viewModel = ComposeImageVectorPreviewViewModelImpl(
+                    coroutineScope = coroutineScope,
+                    iconDataParser = KotlinFileIconDataParser(
+                        file.toNioPath()
+                            .toFile(),
+                    ),
+                ),
+                coroutineScope = coroutineScope,
             ),
-            "ComposeImageVectorEditor",
+            Bundle.message("preview_editor_title"),
         )
     }
 

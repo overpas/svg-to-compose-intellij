@@ -29,6 +29,7 @@ class ComposeImageVectorPreviewViewModelImpl(
 
     private fun parseIconData() {
         coroutineScope.launch {
+            state.update { ComposeImageVectorPreviewState.Rendering }
             iconDataParser.parse()
                 .fold(
                     onSuccess = { iconData ->
