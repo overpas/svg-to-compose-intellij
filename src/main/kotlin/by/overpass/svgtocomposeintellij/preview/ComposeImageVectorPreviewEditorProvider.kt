@@ -2,6 +2,7 @@ package by.overpass.svgtocomposeintellij.preview
 
 import by.overpass.svgtocomposeintellij.Bundle
 import by.overpass.svgtocomposeintellij.preview.data.KotlinFileIconDataParser
+import by.overpass.svgtocomposeintellij.preview.data.asInputStream
 import by.overpass.svgtocomposeintellij.preview.data.imageVectorDeclarationPattern
 import by.overpass.svgtocomposeintellij.preview.presentation.ComposeImageVectorPreviewViewModelImpl
 import by.overpass.svgtocomposeintellij.preview.ui.ComposeImageVectorPreviewEditor
@@ -33,8 +34,7 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
                 viewModel = ComposeImageVectorPreviewViewModelImpl(
                     coroutineScope = coroutineScope,
                     iconDataParser = KotlinFileIconDataParser(
-                        file.toNioPath()
-                            .toFile(),
+                        file.asInputStream(),
                     ),
                 ),
                 coroutineScope = coroutineScope,
