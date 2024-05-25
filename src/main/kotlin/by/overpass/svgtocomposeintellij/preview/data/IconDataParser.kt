@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.vector.DefaultStrokeLineWidth
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.PathBuilder
 import androidx.compose.ui.unit.dp
-import java.io.File
+import java.io.InputStream
 import java.lang.reflect.Modifier
 import java.lang.reflect.Proxy
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +35,7 @@ interface IconDataParser {
 
 @Suppress("TooManyFunctions")
 class KotlinFileIconDataParser(
-    private val file: File,
+    private val inputStream: InputStream,
 ) : IconDataParser {
 
     private val builderPattern =
@@ -78,7 +78,7 @@ class KotlinFileIconDataParser(
 
     override suspend fun parse(): Result<IconData> = withContext(Dispatchers.Default) {
         runCatching<IconData> {
-            val text = file.readText()
+            val text = inputStream.reader().readText()
             val name = getIconName(text)
             val builderDefinition = getBuilderDefinition(text) ?: throw IllegalStateException("Failed to parse icon")
             val builderParams = getNamedParams(builderDefinition.builderParams)

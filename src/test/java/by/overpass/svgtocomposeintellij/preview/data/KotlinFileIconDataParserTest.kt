@@ -8,8 +8,8 @@ class KotlinFileIconDataParserTest {
 
     @Test
     fun `Ab-testing icon is parsed`() = runTest {
-        val file = File("src/test/resources/kotlin/Ab-testing.kt")
-        val parser = KotlinFileIconDataParser(file)
+        val inputStream = File("src/test/resources/kotlin/Ab-testing.kt").inputStream()
+        val parser = KotlinFileIconDataParser(inputStream)
 
         val actual = parser.parse()
 
@@ -18,8 +18,8 @@ class KotlinFileIconDataParserTest {
 
     @Test
     fun `Note icon is parsed`() = runTest {
-        val file = File("src/test/resources/kotlin/Note.kt")
-        val parser = KotlinFileIconDataParser(file)
+        val inputStream = File("src/test/resources/kotlin/Note.kt").inputStream()
+        val parser = KotlinFileIconDataParser(inputStream)
 
         val actual = parser.parse()
 
@@ -28,8 +28,8 @@ class KotlinFileIconDataParserTest {
 
     @Test
     fun `Clear icon is NOT parsed`() = runTest {
-        val file = File("src/test/resources/kotlin/Clear.kt")
-        val parser = KotlinFileIconDataParser(file)
+        val inputStream = File("src/test/resources/kotlin/Clear.kt").inputStream()
+        val parser = KotlinFileIconDataParser(inputStream)
 
         val actual = parser.parse()
 
@@ -38,8 +38,8 @@ class KotlinFileIconDataParserTest {
 
     @Test
     fun `__MyIconPack file is NOT parsed`() = runTest {
-        val file = File("src/test/resources/kotlin/Clear.kt")
-        val parser = KotlinFileIconDataParser(file)
+        val inputStream = File("src/test/resources/kotlin/Clear.kt").inputStream()
+        val parser = KotlinFileIconDataParser(inputStream)
 
         val actual = parser.parse()
 
