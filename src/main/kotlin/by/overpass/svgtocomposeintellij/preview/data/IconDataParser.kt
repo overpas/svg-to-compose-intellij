@@ -43,7 +43,7 @@ class KotlinFileIconDataParser(
                 ".build\\(\\)").toRegex()
     private val namedParamsPattern =
         "(?<paramName>\\w+)[\\s\\n]*=[\\s\\n]*(?<paramValue>[\\w.\"()]+)(,|([\\s\\n]*\\)))".toRegex()
-    private val pathOperationPattern = "path\\s*(?<pathParams>\\([\\S\\s]*)?\\{(?<pathContent>[\\S\\s]*)\\}".toRegex()
+    private val pathOperationPattern = "path\\s*(?<pathParams>\\([^{}]*)?\\{(?<pathContent>[^{}]*)\\}".toRegex()
 
     private val defaultColor = Color.Unspecified.value.toLong()
 
