@@ -27,6 +27,16 @@ class KotlinFileIconDataParserTest {
     }
 
     @Test
+    fun `InfoCircle (with 2 paths) icon is parsed`() = runTest {
+        val inputStream = File("src/test/resources/kotlin/InfoCircle.kt").inputStream()
+        val parser = KotlinFileIconDataParser(inputStream)
+
+        val actual = parser.parse()
+
+        assert(actual.isSuccess)
+    }
+
+    @Test
     fun `Clear icon is NOT parsed`() = runTest {
         val inputStream = File("src/test/resources/kotlin/Clear.kt").inputStream()
         val parser = KotlinFileIconDataParser(inputStream)
