@@ -1,6 +1,7 @@
 [versions]
 kotlin = "1.9.23"
 intellij = "1.17.2"
+intellij-platform = "2.0.1"
 detekt = "1.23.5"
 junit = "4.13.2"
 kotlin-coroutines = "1.7.3"
@@ -23,8 +24,11 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+
 [plugins]
 intellij = { id = "org.jetbrains.intellij", version.ref = "intellij" }
+intellij-platform = { id = "org.jetbrains.intellij.platform", version.ref = "intellij-platform" }
+intellij-platform-migration = { id = "org.jetbrains.intellij.platform.migration", version.ref = "intellij-platform" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 compose-desktop = { id = "org.jetbrains.compose", version.ref = "compose-desktop" }

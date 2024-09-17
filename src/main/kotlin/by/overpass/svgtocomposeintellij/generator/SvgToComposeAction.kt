@@ -7,6 +7,7 @@ import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeViewM
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.CantBeEmptyStringValidator
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.ProperDirValidator
 import by.overpass.svgtocomposeintellij.generator.ui.SvgToComposeDialog
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -36,6 +37,9 @@ class SvgToComposeAction : AnAction() {
             ),
         ).show()
     }
+
+    override fun getActionUpdateThread(): ActionUpdateThread =
+        ActionUpdateThread.BGT
 
     private val AnActionEvent.targetDir: File?
         get() {

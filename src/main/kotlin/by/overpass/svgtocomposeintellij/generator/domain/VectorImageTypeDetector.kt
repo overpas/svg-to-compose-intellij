@@ -10,7 +10,7 @@ interface VectorImageTypeDetector {
 
         override fun detect(path: String): VectorImageType? {
             val files = File(path)
-                .listFiles { file -> !file.isHidden }
+                .listFiles { file -> !file.isHidden && !file.name.startsWith(".") }
                 ?: return null
             return if (files.all { file -> file.extension == "svg" }) {
                 VectorImageType.SVG
