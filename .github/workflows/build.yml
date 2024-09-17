@@ -15,9 +15,9 @@ jobs:
         os:
           - macos-latest
           - ubuntu-latest
+          - windows-latest
         jdk:
           - zulu
-          - corretto
           - adopt
     runs-on: ${{ matrix.os }}
     steps:
