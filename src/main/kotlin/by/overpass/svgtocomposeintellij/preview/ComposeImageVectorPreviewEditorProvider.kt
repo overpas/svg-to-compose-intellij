@@ -28,17 +28,18 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {
         val textEditor = TextEditorProvider.getInstance().createEditor(project, file) as TextEditor
         val coroutineScope = CoroutineScope(MainUIDispatcher + SupervisorJob())
+        val composeImageVectorPreviewEditor = ComposeImageVectorPreviewEditor(
+            viewModel = ComposeImageVectorPreviewViewModelImpl(
+                coroutineScope = coroutineScope,
+                iconDataParser = KotlinFileIconDataParser(
+                    file.asInputStream(),
+                ),
+            ),
+            coroutineScope = coroutineScope,
+        )
         return TextEditorWithPreview(
             textEditor,
-            ComposeImageVectorPreviewEditor(
-                viewModel = ComposeImageVectorPreviewViewModelImpl(
-                    coroutineScope = coroutineScope,
-                    iconDataParser = KotlinFileIconDataParser(
-                        file.asInputStream(),
-                    ),
-                ),
-                coroutineScope = coroutineScope,
-            ),
+            composeImageVectorPreviewEditor,
             Bundle.message("preview_editor_title"),
         )
     }
