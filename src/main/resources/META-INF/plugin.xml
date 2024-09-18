@@ -25,6 +25,10 @@
                 implementation="by.overpass.svgtocomposeintellij.preview.ComposeImageVectorPreviewEditorProvider"/>
     </extensions>
 
+    <extensions defaultExtensionNs="org.jetbrains.kotlin">
+        <supportsKotlinPluginMode supportsK2="true" />
+    </extensions>
+
     <resource-bundle>messages.Bundle</resource-bundle>
 
     <actions>

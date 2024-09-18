@@ -22,7 +22,7 @@ import org.mockito.kotlin.wheneverBlocking
 
 class SvgToComposeViewModelImplTest {
 
-    private val targetDir = File("/dir")
+    private val targetDir = File("${File.pathSeparator}dir")
     private val svgIconsGenerator = mock<SvgIconsGenerator>()
     private val vectorImageTypeDetector = mock<VectorImageTypeDetector>()
     private val nonStringEmptyValidator = mock<ValueValidator<String, Unit>>()
@@ -43,7 +43,7 @@ class SvgToComposeViewModelImplTest {
     fun `accessorName updated to a valid value`() {
         val expected = DataInput(
             accessorName = Validatable("NewAccessorName"),
-            outputDir = Validatable("/dir"),
+            outputDir = Validatable("${File.pathSeparator}dir"),
         )
         whenever(nonStringEmptyValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
@@ -57,7 +57,7 @@ class SvgToComposeViewModelImplTest {
     fun `accessorName updated to an invalid value`() {
         val expected = DataInput(
             accessorName = Validatable("", isValid = false, error = Unit),
-            outputDir = Validatable("/dir"),
+            outputDir = Validatable("${File.pathSeparator}dir"),
         )
         whenever(nonStringEmptyValidator.validate(any())).thenReturn(ValidationResult.Error(Unit))
 
@@ -71,7 +71,7 @@ class SvgToComposeViewModelImplTest {
     fun `allAssetsPropertyName updated to a valid value`() {
         val expected = DataInput(
             allAssetsPropertyName = Validatable("New"),
-            outputDir = Validatable("/dir"),
+            outputDir = Validatable("${File.pathSeparator}dir"),
         )
         whenever(nonStringEmptyValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
@@ -85,7 +85,7 @@ class SvgToComposeViewModelImplTest {
     fun `allAssetsPropertyName updated to an invalid value`() {
         val expected = DataInput(
             allAssetsPropertyName = Validatable("", isValid = false, error = Unit),
-            outputDir = Validatable("/dir"),
+            outputDir = Validatable("${File.pathSeparator}dir"),
         )
         whenever(nonStringEmptyValidator.validate(any())).thenReturn(ValidationResult.Error(Unit))
 
@@ -98,11 +98,11 @@ class SvgToComposeViewModelImplTest {
     @Test
     fun `outputDir updated to a valid value`() {
         val expected = DataInput(
-            outputDir = Validatable("/new/dir"),
+            outputDir = Validatable("${File.pathSeparator}new${File.pathSeparator}dir"),
         )
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
-        viewModel.onOutputDirChanged("/new/dir")
+        viewModel.onOutputDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
         val actual = viewModel.state.value
 
         assertEquals(expected, actual)
@@ -124,12 +124,12 @@ class SvgToComposeViewModelImplTest {
     @Test
     fun `vectorImagesDirChanged updated to a valid value`() {
         val expected = DataInput(
-            outputDir = Validatable("/dir"),
-            vectorImagesDir = Validatable("/new/dir"),
+            outputDir = Validatable("${File.pathSeparator}dir"),
+            vectorImagesDir = Validatable("${File.pathSeparator}new${File.pathSeparator}dir"),
         )
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
-        viewModel.onVectorImagesDirChanged("/new/dir")
+        viewModel.onVectorImagesDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
         val actual = viewModel.state.value
 
         assertEquals(expected, actual)
@@ -139,22 +139,22 @@ class SvgToComposeViewModelImplTest {
     fun `vectorImageTypeDetector is triggered when vectorImagesDirChanged updated to a valid value`() {
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
-        viewModel.onVectorImagesDirChanged("/new/dir")
+        viewModel.onVectorImagesDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
 
-        verify(vectorImageTypeDetector).detect("/new/dir")
+        verify(vectorImageTypeDetector).detect("${File.pathSeparator}new${File.pathSeparator}dir")
     }
 
     @Test
     fun `vectorImageType is updated when vectorImagesDirChanged updated to a valid value`() {
         val expected = DataInput(
-            outputDir = Validatable("/dir"),
-            vectorImagesDir = Validatable("/new/dir"),
+            outputDir = Validatable("${File.pathSeparator}dir"),
+            vectorImagesDir = Validatable("${File.pathSeparator}new${File.pathSeparator}dir"),
             vectorImageType = VectorImageType.DRAWABLE,
         )
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
         whenever(vectorImageTypeDetector.detect(any())).thenReturn(VectorImageType.DRAWABLE)
 
-        viewModel.onVectorImagesDirChanged("/new/dir")
+        viewModel.onVectorImagesDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
         val actual = viewModel.state.value
 
         assertEquals(expected, actual)
@@ -163,7 +163,7 @@ class SvgToComposeViewModelImplTest {
     @Test
     fun `vectorImagesDirChanged updated to an invalid value`() {
         val expected = DataInput(
-            outputDir = Validatable("/dir"),
+            outputDir = Validatable("${File.pathSeparator}dir"),
             vectorImagesDir = Validatable("", isValid = false, error = DirError.Empty),
         )
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Error(DirError.Empty))
@@ -187,7 +187,7 @@ class SvgToComposeViewModelImplTest {
     @Test
     fun `vectorImageType updated`() {
         val expected = DataInput(
-            outputDir = Validatable("/dir"),
+            outputDir = Validatable("${File.pathSeparator}dir"),
             vectorImageType = VectorImageType.DRAWABLE,
         )
 
@@ -200,7 +200,7 @@ class SvgToComposeViewModelImplTest {
     @Test
     fun `coroutineScope is closed when ViewModel is cleared`() {
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
-        viewModel.onVectorImagesDirChanged("/dir")
+        viewModel.onVectorImagesDirChanged("${File.pathSeparator}dir")
 
         viewModel.onCleared()
         viewModel.generate()
@@ -211,13 +211,13 @@ class SvgToComposeViewModelImplTest {
     @Test
     fun `progress is shown and svg icons generated successfully`() = runTest(testDispatcher) {
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
-        viewModel.onVectorImagesDirChanged("/dir")
+        viewModel.onVectorImagesDirChanged("${File.pathSeparator}dir")
         wheneverBlocking { svgIconsGenerator.generate(any()) }.thenReturn(Result.success(Unit))
 
         viewModel.state.test {
             val initialState = DataInput(
-                outputDir = Validatable("/dir"),
-                vectorImagesDir = Validatable("/dir"),
+                outputDir = Validatable("${File.pathSeparator}dir"),
+                vectorImagesDir = Validatable("${File.pathSeparator}dir"),
                 isInProgress = false,
             )
             assertEquals(initialState, awaitItem())
@@ -233,14 +233,14 @@ class SvgToComposeViewModelImplTest {
     @Test
     fun `progress is shown and svg icons generation failed`() = runTest(testDispatcher) {
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
-        viewModel.onVectorImagesDirChanged("/dir")
+        viewModel.onVectorImagesDirChanged("${File.pathSeparator}dir")
         val exception = RuntimeException("Test")
         wheneverBlocking { svgIconsGenerator.generate(any()) }.thenReturn(Result.failure(exception))
 
         viewModel.state.test {
             val initialState = DataInput(
-                outputDir = Validatable("/dir"),
-                vectorImagesDir = Validatable("/dir"),
+                outputDir = Validatable("${File.pathSeparator}dir"),
+                vectorImagesDir = Validatable("${File.pathSeparator}dir"),
                 isInProgress = false,
             )
             assertEquals(initialState, awaitItem())

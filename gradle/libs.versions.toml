@@ -1,30 +1,31 @@
 [versions]
-kotlin = "1.9.23"
+kotlin = "2.0.20"
 intellij = "1.17.2"
+intellij-platform = "2.0.1"
 detekt = "1.23.5"
 junit = "4.13.2"
 kotlin-coroutines = "1.7.3"
 svg-to-compose = "0.8.1"
 mockito-kotlin = "5.0.0"
-jewel = "0.15.2.2"
-jewel-compose-utils = "0.6.3"
-compose-desktop = "1.6.1"
+jewel = "0.24.2"
+compose-desktop = "1.7.0-beta01"
 file-picker = "3.1.0"
 turbine = "1.0.0"
+detekt-compose-rules = "1.4.0"
 
 [libraries]
-kotlin-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
-kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 svg-to-compose = { group = "com.github.DevSrSouza", name = "svg-to-compose", version.ref = "svg-to-compose" }
-jewel-ide-laf-bridge-232 = { group = "org.jetbrains.jewel", name = "jewel-ide-laf-bridge-232", version.ref = "jewel" }
-jewel-compose-utils = { group = "org.jetbrains.jewel", name = "jewel-compose-utils", version.ref = "jewel-compose-utils" }
+jewel-ide-laf-bridge-241 = { group = "org.jetbrains.jewel", name = "jewel-ide-laf-bridge-241", version.ref = "jewel" }
 compose-multiplatform-file-picker = { group = "com.darkrockstudios", name = "mpfilepicker", version.ref = "file-picker" }
+detekt-compose-rules = { module = "ru.kode:detekt-rules-compose", version.ref = "detekt-compose-rules" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+
 [plugins]
-intellij = { id = "org.jetbrains.intellij", version.ref = "intellij" }
+intellij-platform = { id = "org.jetbrains.intellij.platform", version.ref = "intellij-platform" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 compose-desktop = { id = "org.jetbrains.compose", version.ref = "compose-desktop" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
