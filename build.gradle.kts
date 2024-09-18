@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.detekt)
     alias(libs.plugins.compose.desktop)
+    alias(libs.plugins.compose.compiler)
 }
 
 fun environment(key: String) = providers.environmentVariable(key)
@@ -55,12 +56,13 @@ dependencies {
             exclude(group = "org.jetbrains.compose.material")
         }
     }
-    implementation(libs.jewel.ide.laf.bridge.get232()) {
+    implementation(libs.jewel.ide.laf.bridge.get241()) {
         exclude(group = "org.jetbrains.kotlinx")
     }
     implementation(libs.compose.multiplatform.file.picker) {
         exclude(group = "org.jetbrains.kotlinx")
     }
+    detektPlugins(libs.detekt.compose.rules)
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)
     testImplementation(libs.mockito.kotlin)
@@ -110,6 +112,16 @@ intellijPlatform {
 
 kotlin {
     jvmToolchain(properties["jvm-version"].toString().toInt())
+}
+
+compose.desktop {
+    application {
+        nativeDistributions {
+            linux {
+                modules("jdk.security.auth")
+            }
+        }
+    }
 }
 
 tasks {

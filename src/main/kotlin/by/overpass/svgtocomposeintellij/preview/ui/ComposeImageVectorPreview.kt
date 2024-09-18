@@ -29,6 +29,7 @@ import org.jetbrains.jewel.ui.component.CircularProgressIndicator
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.Typography
+import org.jetbrains.jewel.ui.icon.PathIconKey
 
 @Composable
 fun ComposeImageVectorPreview(viewModel: ComposeImageVectorPreviewViewModel, modifier: Modifier = Modifier) {
@@ -91,9 +92,8 @@ private fun PreviewError(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(
-            resource = "general/error.svg",
+            key = PathIconKey("general/error.svg", AllIcons::class.java),
             contentDescription = Bundle.message("preview_state_error_content_description"),
-            iconClass = AllIcons::class.java,
             modifier = Modifier.weight(1f)
                 .fillMaxWidth()
                 .padding(32.dp),
@@ -143,9 +143,8 @@ private fun PreviewContent(
             modifier = Modifier.fillMaxWidth(),
         ) {
             Icon(
-                resource = "general/notificationWarning.svg",
+                key = PathIconKey("general/notificationWarning.svg", AllIcons::class.java),
                 contentDescription = Bundle.message("preview_warning_icon_content_description"),
-                iconClass = AllIcons::class.java,
                 modifier = Modifier.size(16.dp)
             )
             Spacer(Modifier.width(8.dp))

@@ -29,7 +29,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInWindow
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
@@ -42,7 +41,6 @@ import org.jetbrains.jewel.foundation.theme.OverrideDarkMode
 import org.jetbrains.jewel.ui.component.styling.TooltipStyle
 import org.jetbrains.jewel.ui.theme.tooltipStyle
 import org.jetbrains.jewel.ui.util.isDark
-import org.jetbrains.jewel.ui.component.TooltipPlacement as JewelTooltipPlacement
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -50,11 +48,7 @@ fun OptionalTooltip(
     tooltip: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
     style: TooltipStyle = JewelTheme.tooltipStyle,
-    tooltipPlacement: TooltipPlacement = JewelTooltipPlacement(
-        contentOffset = style.metrics.tooltipOffset,
-        alignment = style.metrics.tooltipAlignment,
-        density = LocalDensity.current,
-    ),
+    tooltipPlacement: TooltipPlacement = style.metrics.placement,
     content: @Composable () -> Unit,
 ) {
     OptionalTooltipArea(

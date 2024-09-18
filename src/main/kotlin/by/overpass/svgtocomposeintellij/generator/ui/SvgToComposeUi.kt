@@ -10,12 +10,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -43,6 +48,7 @@ import org.jetbrains.jewel.ui.component.IconButton
 import org.jetbrains.jewel.ui.component.IndeterminateHorizontalProgressBar
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
+import org.jetbrains.jewel.ui.icon.PathIconKey
 
 private const val WEIGHT_LEFT = 1f
 private const val WEIGHT_RIGHT = 3f
@@ -67,11 +73,11 @@ private fun SvgToComposePlugin(viewModel: SvgToComposeViewModel, modifier: Modif
     when (state) {
         is DataInput -> DataInputWithProgress(
             dataInput = state as DataInput,
-            onAccessorNameChanged = viewModel::onAccessorNameChanged,
-            onOutputDirChanged = viewModel::onOutputDirChanged,
-            onVectorImagesDirChanged = viewModel::onVectorImagesDirChanged,
-            onVectorImageTypeChanged = viewModel::onVectorImageTypeChanged,
-            onAllAssetsPropertyNameChanged = viewModel::onAllAssetsPropertyNameChanged,
+            onAccessorNameChange = viewModel::onAccessorNameChanged,
+            onOutputDirChange = viewModel::onOutputDirChanged,
+            onVectorImagesDirChange = viewModel::onVectorImagesDirChanged,
+            onVectorImageTypeChange = viewModel::onVectorImageTypeChanged,
+            onAllAssetsPropertyNameChange = viewModel::onAllAssetsPropertyNameChanged,
             modifier = modifier,
         )
         is Error -> GenerationError(
@@ -85,11 +91,11 @@ private fun SvgToComposePlugin(viewModel: SvgToComposeViewModel, modifier: Modif
 @Composable
 private fun DataInputWithProgress(
     dataInput: DataInput,
-    onAccessorNameChanged: (String) -> Unit,
-    onOutputDirChanged: (String) -> Unit,
-    onVectorImagesDirChanged: (String) -> Unit,
-    onVectorImageTypeChanged: (VectorImageType) -> Unit,
-    onAllAssetsPropertyNameChanged: (String) -> Unit,
+    onAccessorNameChange: (String) -> Unit,
+    onOutputDirChange: (String) -> Unit,
+    onVectorImagesDirChange: (String) -> Unit,
+    onVectorImageTypeChange: (VectorImageType) -> Unit,
+    onAllAssetsPropertyNameChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -101,11 +107,11 @@ private fun DataInputWithProgress(
         ) {
             DataInput(
                 dataInput = dataInput,
-                onAccessorNameChanged = onAccessorNameChanged,
-                onOutputDirChanged = onOutputDirChanged,
-                onVectorImagesDirChanged = onVectorImagesDirChanged,
-                onVectorImageTypeChanged = onVectorImageTypeChanged,
-                onAllAssetsPropertyNameChanged = onAllAssetsPropertyNameChanged,
+                onAccessorNameChange = onAccessorNameChange,
+                onOutputDirChange = onOutputDirChange,
+                onVectorImagesDirChange = onVectorImagesDirChange,
+                onVectorImageTypeChange = onVectorImageTypeChange,
+                onAllAssetsPropertyNameChange = onAllAssetsPropertyNameChange,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -128,7 +134,7 @@ private fun Dimmed(
         if (isDimmed) {
             Box(
                 modifier = Modifier.fillMaxSize()
-                    .background(JewelTheme.globalColors.paneBackground.copy(alpha = 0.5F))
+                    .background(JewelTheme.globalColors.panelBackground.copy(alpha = 0.5F))
                     .disableClickAndRipple(),
             )
         }
@@ -138,11 +144,11 @@ private fun Dimmed(
 @Composable
 private fun DataInput(
     dataInput: DataInput,
-    onAccessorNameChanged: (String) -> Unit,
-    onOutputDirChanged: (String) -> Unit,
-    onVectorImagesDirChanged: (String) -> Unit,
-    onVectorImageTypeChanged: (VectorImageType) -> Unit,
-    onAllAssetsPropertyNameChanged: (String) -> Unit,
+    onAccessorNameChange: (String) -> Unit,
+    onOutputDirChange: (String) -> Unit,
+    onVectorImagesDirChange: (String) -> Unit,
+    onVectorImageTypeChange: (VectorImageType) -> Unit,
+    onAllAssetsPropertyNameChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
@@ -153,30 +159,30 @@ private fun DataInput(
         StringPropertyRow(
             propertyName = Bundle.message("generator_accessor_name_hint"),
             value = dataInput.accessorName,
-            onValueChanged = onAccessorNameChanged,
+            onValueChange = onAccessorNameChange,
         )
         Spacer(Modifier.height(8.dp))
         BrowseDirRow(
             propertyName = Bundle.message("generator_output_directory_hint"),
             dir = dataInput.outputDir,
-            onDirChanged = onOutputDirChanged,
+            onDirChange = onOutputDirChange,
         )
         Spacer(Modifier.height(8.dp))
         BrowseDirRow(
             propertyName = Bundle.message("generator_vector_images_directory_hint"),
             dir = dataInput.vectorImagesDir,
-            onDirChanged = onVectorImagesDirChanged,
+            onDirChange = onVectorImagesDirChange,
         )
         Spacer(Modifier.height(8.dp))
         VectorImageTypeRow(
             vectorImageType = dataInput.vectorImageType,
-            onVectorImageTypeChanded = onVectorImageTypeChanged,
+            onVectorImageTypeChange = onVectorImageTypeChange,
         )
         Spacer(Modifier.height(8.dp))
         StringPropertyRow(
             propertyName = Bundle.message("generator_all_assets_property_hint"),
             value = dataInput.allAssetsPropertyName,
-            onValueChanged = onAllAssetsPropertyNameChanged,
+            onValueChange = onAllAssetsPropertyNameChange,
         )
     }
 }
@@ -184,7 +190,7 @@ private fun DataInput(
 @Composable
 private fun VectorImageTypeRow(
     vectorImageType: VectorImageType,
-    onVectorImageTypeChanded: (VectorImageType) -> Unit,
+    onVectorImageTypeChange: (VectorImageType) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -201,7 +207,7 @@ private fun VectorImageTypeRow(
                 VectorImageType.entries.forEach { imageType ->
                     selectableItem(
                         selected = imageType == vectorImageType,
-                        onClick = { onVectorImageTypeChanded(imageType) }) {
+                        onClick = { onVectorImageTypeChange(imageType) }) {
                         Text(imageType.name)
                     }
                 }
@@ -215,11 +221,12 @@ private fun VectorImageTypeRow(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun BrowseDirRow(
     propertyName: String,
     dir: Validatable<String, DirError>,
-    onDirChanged: (String) -> Unit,
+    onDirChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -231,68 +238,71 @@ private fun BrowseDirRow(
             modifier = Modifier.weight(WEIGHT_LEFT),
         )
         var showFilePicker by remember { mutableStateOf(false) }
-        DirTextField(
-            dir = dir,
-            onValueChange = onDirChanged,
+        val dirValueState = rememberTextFieldState(dir.value)
+        LaunchedEffect(dirValueState) {
+            snapshotFlow { dirValueState.text }.collect { charSequence ->
+                onDirChange(charSequence.toString())
+            }
+        }
+        OptionalTooltip(
+            tooltip = when (dir.error) {
+                null -> null
+                is DirError.Empty -> {
+                    { Text(Bundle.message("generator_output_directory_invalid_empty_message")) }
+                }
+                is DirError.InvalidPath -> {
+                    { Text(Bundle.message("generator_output_directory_invalid_path_message")) }
+                }
+                is DirError.NotADirectory -> {
+                    { Text(Bundle.message("generator_output_directory_invalid_not_directory_message")) }
+                }
+            },
             modifier = Modifier.weight(WEIGHT_RIGHT),
         ) {
-            showFilePicker = !showFilePicker
+            DirTextField(
+                dirValueState = dirValueState,
+                outline = if (dir.isValid) Outline.None else Outline.Error,
+                onBrowseClick = { showFilePicker = !showFilePicker },
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
         DirectoryPicker(
             show = showFilePicker,
             initialDirectory = if (dir.isValid) dir.value else System.getProperty("user.home"),
+            title = Bundle.message("generator_directory_title_template", propertyName),
             onFileSelected = { selectedDir ->
                 if (selectedDir != null) {
-                    onDirChanged(selectedDir)
+                    dirValueState.setTextAndPlaceCursorAtEnd(selectedDir)
                 } else {
                     showFilePicker = false
                 }
-            }
+            },
         )
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DirTextField(
-    dir: Validatable<String, DirError>,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
+    dirValueState: TextFieldState,
+    outline: Outline,
     onBrowseClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    OptionalTooltip(
-        tooltip = when (dir.error) {
-            null -> null
-            is DirError.Empty -> {
-                { Text(Bundle.message("generator_output_directory_invalid_empty_message")) }
-            }
-            is DirError.InvalidPath -> {
-                { Text(Bundle.message("generator_output_directory_invalid_path_message")) }
-            }
-            is DirError.NotADirectory -> {
-                { Text(Bundle.message("generator_output_directory_invalid_not_directory_message")) }
+    TextField(
+        state = dirValueState,
+        trailingIcon = {
+            IconButton(
+                onClick = onBrowseClick
+            ) {
+                Icon(
+                    key = PathIconKey("expui/inline/browse.svg", AllIcons::class.java),
+                    contentDescription = Bundle.message("generator_picker_button_content_description"),
+                )
             }
         },
+        outline = outline,
         modifier = modifier,
-    ) {
-        TextField(
-            value = dir.value,
-            onValueChange = onValueChange,
-            trailingIcon = {
-                IconButton(
-                    onClick = onBrowseClick,
-                ) {
-                    Icon(
-                        "expui/inline/browse.svg",
-                        iconClass = AllIcons::class.java,
-                        contentDescription = "Browse",
-                    )
-                }
-            },
-            outline = if (dir.isValid) Outline.None else Outline.Error,
-            modifier = Modifier.fillMaxWidth(),
-        )
-    }
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -300,7 +310,7 @@ private fun DirTextField(
 private fun StringPropertyRow(
     propertyName: String,
     value: Validatable<String, Unit>,
-    onValueChanged: (String) -> Unit,
+    onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -324,9 +334,14 @@ private fun StringPropertyRow(
             },
             modifier = Modifier.weight(WEIGHT_RIGHT),
         ) {
+            val stringValueState = rememberTextFieldState(value.value)
+            LaunchedEffect(stringValueState) {
+                snapshotFlow { stringValueState.text }.collect { charSequence ->
+                    onValueChange(charSequence.toString())
+                }
+            }
             TextField(
-                value = value.value,
-                onValueChange = onValueChanged,
+                state = stringValueState,
                 outline = if (value.isValid) Outline.None else Outline.Error,
                 modifier = Modifier.fillMaxWidth(),
             )
