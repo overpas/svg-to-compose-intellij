@@ -10,7 +10,7 @@ mockito-kotlin = "5.0.0"
 jewel = "0.24.2"
 compose-desktop = "1.7.0-beta01"
 file-picker = "3.1.0"
-turbine = "1.0.0"
+turbine = "1.2.0"
 detekt-compose-rules = "1.4.0"
 
 [libraries]
