@@ -1,7 +1,7 @@
 [versions]
 kotlin = "2.0.20"
 intellij = "1.17.2"
-intellij-platform = "2.0.1"
+intellij-platform = "2.2.1"
 detekt = "1.23.7"
 junit = "4.13.2"
 kotlin-coroutines = "1.7.3"
