@@ -35,11 +35,10 @@ import by.overpass.svgtocomposeintellij.generator.presentation.validation.Valida
 import com.darkrockstudios.libraries.mpfilepicker.DirectoryPicker
 import com.intellij.icons.AllIcons
 import com.intellij.ui.JBColor
-import javax.swing.JComponent
 import org.jetbrains.jewel.bridge.JewelComposePanel
-import org.jetbrains.jewel.bridge.theme.SwingBridgeTheme
 import org.jetbrains.jewel.bridge.toComposeColor
 import org.jetbrains.jewel.foundation.ExperimentalJewelApi
+import org.jetbrains.jewel.foundation.enableNewSwingCompositing
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Outline
 import org.jetbrains.jewel.ui.component.Dropdown
@@ -49,13 +48,15 @@ import org.jetbrains.jewel.ui.component.IndeterminateHorizontalProgressBar
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 import org.jetbrains.jewel.ui.icon.PathIconKey
+import javax.swing.JComponent
 
 private const val WEIGHT_LEFT = 1f
 private const val WEIGHT_RIGHT = 3f
 
 @OptIn(ExperimentalJewelApi::class)
-fun svgToComposePluginPanel(viewModel: SvgToComposeViewModel): JComponent = JewelComposePanel {
-    SwingBridgeTheme {
+fun svgToComposePluginPanel(viewModel: SvgToComposeViewModel): JComponent {
+    enableNewSwingCompositing()
+    return JewelComposePanel {
         val bgColor by remember(JBColor.PanelBackground.rgb) {
             mutableStateOf(JBColor.PanelBackground.toComposeColor())
         }
@@ -80,10 +81,12 @@ private fun SvgToComposePlugin(viewModel: SvgToComposeViewModel, modifier: Modif
             onAllAssetsPropertyNameChange = viewModel::onAllAssetsPropertyNameChanged,
             modifier = modifier,
         )
+
         is Error -> GenerationError(
             error = state as Error,
             modifier = modifier,
         )
+
         is Finished -> Unit
     }
 }
@@ -250,9 +253,11 @@ private fun BrowseDirRow(
                 is DirError.Empty -> {
                     { Text(Bundle.message("generator_output_directory_invalid_empty_message")) }
                 }
+
                 is DirError.InvalidPath -> {
                     { Text(Bundle.message("generator_output_directory_invalid_path_message")) }
                 }
+
                 is DirError.NotADirectory -> {
                     { Text(Bundle.message("generator_output_directory_invalid_not_directory_message")) }
                 }
@@ -327,7 +332,10 @@ private fun StringPropertyRow(
             } else {
                 {
                     Text(
-                        Bundle.messagePointer("generator_property_invalid_empty_message", propertyName)
+                        Bundle.messagePointer(
+                            "generator_property_invalid_empty_message",
+                            propertyName
+                        )
                             .get(),
                     )
                 }

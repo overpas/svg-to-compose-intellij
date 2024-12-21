@@ -7,6 +7,8 @@ import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeViewM
 import by.overpass.svgtocomposeintellij.generator.presentation.isValid
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
+import com.intellij.ui.FieldPanel
+import com.intellij.ui.components.Panel
 import com.intellij.util.ui.JBUI
 import java.awt.Dimension
 import java.awt.event.ActionEvent
@@ -54,6 +56,7 @@ class SvgToComposeDialog(
         svgToComposePluginPanel(viewModel).apply {
             preferredSize = JBUI.size(Dimension(DEFAULT_DIALOG_CONTENT_WIDTH, DEFAULT_DIALOG_CONTENT_HEIGHT))
         }
+//        FieldPanel()
 
     override fun getOKAction(): Action = generateAction
 

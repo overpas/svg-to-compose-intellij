@@ -36,7 +36,6 @@ dependencies {
         jetbrainsRuntime()
         pluginVerifier()
         zipSigner()
-        instrumentationTools()
         testFramework(TestFrameworkType.Platform)
     }
     implementation(libs.svg.to.compose) {
@@ -56,7 +55,7 @@ dependencies {
             exclude(group = "org.jetbrains.compose.material")
         }
     }
-    implementation(libs.jewel.ide.laf.bridge.get241()) {
+    implementation(libs.jewel.ide.laf.bridge) {
         exclude(group = "org.jetbrains.kotlinx")
     }
     implementation(libs.compose.multiplatform.file.picker) {

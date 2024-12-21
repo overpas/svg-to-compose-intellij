@@ -1,21 +1,20 @@
 [versions]
-kotlin = "2.0.20"
-intellij = "1.17.2"
-intellij-platform = "2.0.1"
+kotlin = "2.1.0"
+intellij-platform = "2.2.1"
 detekt = "1.23.7"
 junit = "4.13.2"
 kotlin-coroutines = "1.10.1"
-svg-to-compose = "0.8.1"
+svg-to-compose = "0.11.0"
 mockito-kotlin = "5.4.0"
-jewel = "0.24.2"
-compose-desktop = "1.7.0-beta01"
+jewel = "0.27.0"
+compose-desktop = "1.7.1"
 file-picker = "3.1.0"
 turbine = "1.2.0"
 detekt-compose-rules = "1.4.0"
 
 [libraries]
 svg-to-compose = { group = "com.github.DevSrSouza", name = "svg-to-compose", version.ref = "svg-to-compose" }
-jewel-ide-laf-bridge-241 = { group = "org.jetbrains.jewel", name = "jewel-ide-laf-bridge-241", version.ref = "jewel" }
+jewel-ide-laf-bridge = { group = "org.jetbrains.jewel", name = "jewel-ide-laf-bridge-241", version.ref = "jewel" }
 compose-multiplatform-file-picker = { group = "com.darkrockstudios", name = "mpfilepicker", version.ref = "file-picker" }
 detekt-compose-rules = { module = "ru.kode:detekt-rules-compose", version.ref = "detekt-compose-rules" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
