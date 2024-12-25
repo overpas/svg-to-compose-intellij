@@ -34,11 +34,6 @@ import by.overpass.svgtocomposeintellij.generator.presentation.validation.DirErr
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.Validatable
 import com.darkrockstudios.libraries.mpfilepicker.DirectoryPicker
 import com.intellij.icons.AllIcons
-import com.intellij.ui.JBColor
-import org.jetbrains.jewel.bridge.JewelComposePanel
-import org.jetbrains.jewel.bridge.toComposeColor
-import org.jetbrains.jewel.foundation.ExperimentalJewelApi
-import org.jetbrains.jewel.foundation.enableNewSwingCompositing
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Outline
 import org.jetbrains.jewel.ui.component.Dropdown
@@ -48,28 +43,12 @@ import org.jetbrains.jewel.ui.component.IndeterminateHorizontalProgressBar
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 import org.jetbrains.jewel.ui.icon.PathIconKey
-import javax.swing.JComponent
 
 private const val WEIGHT_LEFT = 1f
 private const val WEIGHT_RIGHT = 3f
 
-@OptIn(ExperimentalJewelApi::class)
-fun svgToComposePluginPanel(viewModel: SvgToComposeViewModel): JComponent {
-    enableNewSwingCompositing()
-    return JewelComposePanel {
-        val bgColor by remember(JBColor.PanelBackground.rgb) {
-            mutableStateOf(JBColor.PanelBackground.toComposeColor())
-        }
-        SvgToComposePlugin(
-            viewModel = viewModel,
-            modifier = Modifier.fillMaxSize()
-                .background(bgColor),
-        )
-    }
-}
-
 @Composable
-private fun SvgToComposePlugin(viewModel: SvgToComposeViewModel, modifier: Modifier = Modifier) {
+fun SvgToComposePlugin(viewModel: SvgToComposeViewModel, modifier: Modifier = Modifier) {
     val state by viewModel.state.collectAsState()
     when (state) {
         is DataInput -> DataInputWithProgress(

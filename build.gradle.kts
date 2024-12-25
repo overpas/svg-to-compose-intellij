@@ -9,6 +9,11 @@ plugins {
     alias(libs.plugins.compose.compiler)
 }
 
+java {
+    sourceCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
+    targetCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
+}
+
 fun environment(key: String) = providers.environmentVariable(key)
 
 group = "by.overpass"
