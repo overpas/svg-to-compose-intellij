@@ -30,9 +30,8 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {
         initializeComposeMainDispatcherChecker()
         val textEditor = TextEditorProvider.getInstance().createEditor(project, file) as TextEditor
-        // invokespecial instructions should be avoided here, so constructors are moved to
-        // a separate method
-        return createTextEditorWithPreview(file.asInputStream(), textEditor)
+        val inputStream = file.asInputStream()
+        return createTextEditorWithPreview(inputStream, textEditor)
     }
 
     private fun createTextEditorWithPreview(
@@ -40,17 +39,23 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
         textEditor: TextEditor
     ): TextEditorWithPreview {
         val coroutineScope = CoroutineScope(MainUIDispatcher + SupervisorJob())
+        val iconDataParser = KotlinFileIconDataParser(inputStream)
+        val viewModel = ComposeImageVectorPreviewViewModelImpl(
+            coroutineScope = coroutineScope,
+            iconDataParser = iconDataParser,
+        )
         val composeImageVectorPreviewEditor = ComposeImageVectorPreviewEditor(
-            viewModel = ComposeImageVectorPreviewViewModelImpl(
-                coroutineScope = coroutineScope,
-                iconDataParser = KotlinFileIconDataParser(inputStream),
-            ),
+            viewModel = viewModel,
             coroutineScope = coroutineScope,
         )
+        val name = Bundle.message("preview_editor_title")
         return TextEditorWithPreview(
-            textEditor,
-            composeImageVectorPreviewEditor,
-            Bundle.message("preview_editor_title"),
+            myEditor = textEditor,
+            myPreview = composeImageVectorPreviewEditor,
+            name = name,
+            defaultLayout = TextEditorWithPreview.Layout.SHOW_EDITOR_AND_PREVIEW,
+            isVerticalSplit = false,
+            layout = null,
         )
     }
 
