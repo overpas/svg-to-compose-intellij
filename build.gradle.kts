@@ -1,4 +1,5 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("java")
@@ -12,6 +13,12 @@ plugins {
 java {
     sourceCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
     targetCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(properties["jvm-version"].toString())
+    }
 }
 
 fun environment(key: String) = providers.environmentVariable(key)
@@ -118,10 +125,6 @@ intellijPlatform {
             recommended()
         }
     }
-}
-
-kotlin {
-    jvmToolchain(properties["jvm-version"].toString().toInt())
 }
 
 compose.desktop {
