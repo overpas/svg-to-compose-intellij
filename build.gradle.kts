@@ -1,4 +1,5 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("java")
@@ -7,6 +8,17 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.compose.desktop)
     alias(libs.plugins.compose.compiler)
+}
+
+java {
+    sourceCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
+    targetCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.fromTarget(properties["jvm-version"].toString())
+    }
 }
 
 fun environment(key: String) = providers.environmentVariable(key)
@@ -36,7 +48,6 @@ dependencies {
         jetbrainsRuntime()
         pluginVerifier()
         zipSigner()
-        instrumentationTools()
         testFramework(TestFrameworkType.Platform)
     }
     implementation(libs.svg.to.compose) {
@@ -56,10 +67,16 @@ dependencies {
             exclude(group = "org.jetbrains.compose.material")
         }
     }
-    implementation(libs.jewel.ide.laf.bridge.get241()) {
+    implementation(libs.jewel.ide.laf.bridge) {
         exclude(group = "org.jetbrains.kotlinx")
     }
     implementation(libs.compose.multiplatform.file.picker) {
+        exclude(group = "org.jetbrains.kotlinx")
+    }
+    implementation(libs.lifecycle.common.jvm) {
+        exclude(group = "org.jetbrains.kotlinx")
+    }
+    implementation(libs.lifecycle.runtime.desktop) {
         exclude(group = "org.jetbrains.kotlinx")
     }
     detektPlugins(libs.detekt.compose.rules)
@@ -108,10 +125,6 @@ intellijPlatform {
             recommended()
         }
     }
-}
-
-kotlin {
-    jvmToolchain(properties["jvm-version"].toString().toInt())
 }
 
 compose.desktop {

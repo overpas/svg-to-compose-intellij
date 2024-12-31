@@ -23,6 +23,7 @@ local.properties
 !.idea/saveactions_settings.xml
 !.idea/inspectionProfiles
 .intellijPlatform
+.kotlin
 
 .DS_Store
 

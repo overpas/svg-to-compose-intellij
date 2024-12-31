@@ -203,7 +203,7 @@ class SvgToComposeViewModelImplTest {
         viewModel.onVectorImagesDirChanged("${File.pathSeparator}dir")
 
         viewModel.onCleared()
-        viewModel.generate()
+        viewModel.onGenerate()
 
         verifyNoInteractions(svgIconsGenerator)
     }
@@ -222,7 +222,7 @@ class SvgToComposeViewModelImplTest {
             )
             assertEquals(initialState, awaitItem())
 
-            viewModel.generate()
+            viewModel.onGenerate()
 
             val awaitItem = awaitItem()
             assertEquals(initialState.copy(isInProgress = true), awaitItem)
@@ -245,7 +245,7 @@ class SvgToComposeViewModelImplTest {
             )
             assertEquals(initialState, awaitItem())
 
-            viewModel.generate()
+            viewModel.onGenerate()
 
             val awaitItem = awaitItem()
             assertEquals(initialState.copy(isInProgress = true), awaitItem)

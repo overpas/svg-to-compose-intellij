@@ -32,7 +32,7 @@ interface SvgToComposeViewModel {
 
     fun onAllAssetsPropertyNameChanged(allAssetsPropertyName: String)
 
-    fun generate()
+    fun onGenerate()
 
     fun onCleared()
 }
@@ -132,7 +132,7 @@ class SvgToComposeViewModelImpl(
         }
     }
 
-    override fun generate() {
+    override fun onGenerate() {
         coroutineScope.launch {
             updateInput { old -> old.copy(isInProgress = true) }
             val currentState = state.value

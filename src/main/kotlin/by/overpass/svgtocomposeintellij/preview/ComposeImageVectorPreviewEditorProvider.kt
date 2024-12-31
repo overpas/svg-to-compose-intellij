@@ -1,6 +1,7 @@
 package by.overpass.svgtocomposeintellij.preview
 
 import by.overpass.svgtocomposeintellij.Bundle
+import by.overpass.svgtocomposeintellij.initializeComposeMainDispatcherChecker
 import by.overpass.svgtocomposeintellij.preview.data.KotlinFileIconDataParser
 import by.overpass.svgtocomposeintellij.preview.data.asInputStream
 import by.overpass.svgtocomposeintellij.preview.data.imageVectorDeclarationPattern
@@ -18,6 +19,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.jetbrains.skiko.MainUIDispatcher
+import java.io.InputStream
 
 class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
 
@@ -26,21 +28,34 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
     }
 
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {
+        initializeComposeMainDispatcherChecker()
         val textEditor = TextEditorProvider.getInstance().createEditor(project, file) as TextEditor
+        val inputStream = file.asInputStream()
+        return createTextEditorWithPreview(inputStream, textEditor)
+    }
+
+    private fun createTextEditorWithPreview(
+        inputStream: InputStream,
+        textEditor: TextEditor
+    ): TextEditorWithPreview {
         val coroutineScope = CoroutineScope(MainUIDispatcher + SupervisorJob())
+        val iconDataParser = KotlinFileIconDataParser(inputStream)
+        val viewModel = ComposeImageVectorPreviewViewModelImpl(
+            coroutineScope = coroutineScope,
+            iconDataParser = iconDataParser,
+        )
         val composeImageVectorPreviewEditor = ComposeImageVectorPreviewEditor(
-            viewModel = ComposeImageVectorPreviewViewModelImpl(
-                coroutineScope = coroutineScope,
-                iconDataParser = KotlinFileIconDataParser(
-                    file.asInputStream(),
-                ),
-            ),
+            viewModel = viewModel,
             coroutineScope = coroutineScope,
         )
+        val name = Bundle.message("preview_editor_title")
         return TextEditorWithPreview(
-            textEditor,
-            composeImageVectorPreviewEditor,
-            Bundle.message("preview_editor_title"),
+            myEditor = textEditor,
+            myPreview = composeImageVectorPreviewEditor,
+            name = name,
+            defaultLayout = TextEditorWithPreview.Layout.SHOW_EDITOR_AND_PREVIEW,
+            isVerticalSplit = false,
+            layout = null,
         )
     }
 
