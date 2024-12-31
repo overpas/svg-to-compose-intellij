@@ -4,6 +4,6 @@ import com.intellij.openapi.components.Service
 import kotlinx.coroutines.CoroutineScope
 
 @Service(Service.Level.PROJECT)
-internal class ProjectScopeProviderService(
+class ProjectScopeProviderService(
     val scope: CoroutineScope,
 )

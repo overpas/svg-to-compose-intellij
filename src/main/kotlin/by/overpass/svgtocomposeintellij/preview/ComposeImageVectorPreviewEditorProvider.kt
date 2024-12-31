@@ -1,6 +1,7 @@
 package by.overpass.svgtocomposeintellij.preview
 
 import by.overpass.svgtocomposeintellij.Bundle
+import by.overpass.svgtocomposeintellij.initializeComposeMainDispatcherChecker
 import by.overpass.svgtocomposeintellij.preview.data.KotlinFileIconDataParser
 import by.overpass.svgtocomposeintellij.preview.data.asInputStream
 import by.overpass.svgtocomposeintellij.preview.data.imageVectorDeclarationPattern
@@ -26,6 +27,7 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
     }
 
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {
+        initializeComposeMainDispatcherChecker()
         val textEditor = TextEditorProvider.getInstance().createEditor(project, file) as TextEditor
         val coroutineScope = CoroutineScope(MainUIDispatcher + SupervisorJob())
         val composeImageVectorPreviewEditor = ComposeImageVectorPreviewEditor(

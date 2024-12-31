@@ -11,6 +11,7 @@ compose-desktop = "1.7.3"
 file-picker = "3.1.0"
 turbine = "1.2.0"
 detekt-compose-rules = "1.4.0"
+lifecycle = "2.8.7"
 
 [libraries]
 svg-to-compose = { group = "com.github.DevSrSouza", name = "svg-to-compose", version.ref = "svg-to-compose" }
@@ -21,6 +22,8 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
+lifecycle-common-jvm = { group = "androidx.lifecycle", name = "lifecycle-common-jvm", version.ref = "lifecycle" }
+lifecycle-runtime-desktop = { group = "androidx.lifecycle", name = "lifecycle-runtime-desktop", version.ref = "lifecycle" }
 
 [plugins]
 intellij-platform = { id = "org.jetbrains.intellij.platform", version.ref = "intellij-platform" }

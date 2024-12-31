@@ -11,14 +11,12 @@ import by.overpass.svgtocomposeintellij.generator.presentation.Finished
 import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeState
 import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeViewModel
 import by.overpass.svgtocomposeintellij.generator.presentation.isValid
-import com.intellij.openapi.application.EDT
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.JBColor
 import com.intellij.util.ui.JBUI
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
@@ -27,6 +25,7 @@ import org.jetbrains.jewel.bridge.JewelComposePanel
 import org.jetbrains.jewel.bridge.toComposeColor
 import org.jetbrains.jewel.foundation.ExperimentalJewelApi
 import org.jetbrains.jewel.foundation.enableNewSwingCompositing
+import org.jetbrains.skiko.MainUIDispatcher
 import java.awt.Dimension
 import java.awt.event.ActionEvent
 import javax.swing.Action
@@ -41,7 +40,7 @@ class SvgToComposeDialog(
 ) : DialogWrapper(project) {
 
     private val coroutineScope = CoroutineScope(
-        SupervisorJob() + Dispatchers.EDT + CoroutineName(this::class.java.simpleName),
+        SupervisorJob() + MainUIDispatcher + CoroutineName(this::class.java.simpleName),
     )
 
     private val generateAction = GenerateAction(Bundle.message("generator_button_confirm"))
@@ -72,16 +71,6 @@ class SvgToComposeDialog(
             val bgColor by remember(JBColor.PanelBackground.rgb) {
                 mutableStateOf(JBColor.PanelBackground.toComposeColor())
             }
-//            Box(
-//              modifier = Modifier.fillMaxSize()
-//                  .background(bgColor),
-//            ) {
-//                Text(
-//                    text = "Text",
-//                    color = Color.Red,
-//                    modifier = Modifier.align(Alignment.Center),
-//                )
-//            }
             SvgToComposePlugin(
                 viewModel = viewModel,
                 modifier = Modifier.fillMaxSize()
@@ -108,7 +97,7 @@ class SvgToComposeDialog(
     private inner class GenerateAction(name: String) : DialogWrapperAction(name) {
 
         override fun doAction(e: ActionEvent?) {
-            viewModel.generate()
+            viewModel.onGenerate()
         }
     }
 }

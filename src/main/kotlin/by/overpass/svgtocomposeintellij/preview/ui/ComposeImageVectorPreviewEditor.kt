@@ -9,14 +9,12 @@ import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorState
 import com.intellij.openapi.util.UserDataHolderBase
 import com.intellij.util.ui.JBUI
-import java.awt.Dimension
-import java.beans.PropertyChangeListener
-import javax.swing.JComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import org.jetbrains.jewel.bridge.JewelComposePanel
-import org.jetbrains.jewel.bridge.theme.SwingBridgeTheme
-import org.jetbrains.jewel.foundation.ExperimentalJewelApi
+import java.awt.Dimension
+import java.beans.PropertyChangeListener
+import javax.swing.JComponent
 
 private const val DEFAULT_WINDOW_DIMENSION = 400
 
@@ -25,14 +23,11 @@ class ComposeImageVectorPreviewEditor(
     private val coroutineScope: CoroutineScope,
 ) : FileEditor, UserDataHolderBase() {
 
-    @OptIn(ExperimentalJewelApi::class)
     private val component = JewelComposePanel {
-        SwingBridgeTheme {
-            ComposeImageVectorPreview(
-                viewModel = viewModel,
-                modifier = Modifier.fillMaxSize(),
-            )
-        }
+        ComposeImageVectorPreview(
+            viewModel = viewModel,
+            modifier = Modifier.fillMaxSize(),
+        )
     }.apply {
         // The size doesn't seem to matter, it will be expanded
         preferredSize = JBUI.size(Dimension(DEFAULT_WINDOW_DIMENSION, DEFAULT_WINDOW_DIMENSION))

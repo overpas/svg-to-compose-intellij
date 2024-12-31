@@ -8,6 +8,7 @@ import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeViewM
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.CantBeEmptyStringValidator
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.ProperDirValidator
 import by.overpass.svgtocomposeintellij.generator.ui.SvgToComposeDialog
+import by.overpass.svgtocomposeintellij.initializeComposeMainDispatcherChecker
 import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
@@ -29,6 +30,7 @@ class SvgToComposeAction : DumbAwareAction() {
     override fun actionPerformed(event: AnActionEvent) {
         val project = checkNotNull(event.project) { "Project not available" }
         val scope = project.service<ProjectScopeProviderService>().scope
+        initializeComposeMainDispatcherChecker()
         scope.launch(Dispatchers.EDT) {
             SvgToComposeDialog(
                 project,

@@ -66,6 +66,12 @@ dependencies {
     implementation(libs.compose.multiplatform.file.picker) {
         exclude(group = "org.jetbrains.kotlinx")
     }
+    implementation(libs.lifecycle.common.jvm) {
+        exclude(group = "org.jetbrains.kotlinx")
+    }
+    implementation(libs.lifecycle.runtime.desktop) {
+        exclude(group = "org.jetbrains.kotlinx")
+    }
     detektPlugins(libs.detekt.compose.rules)
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)
