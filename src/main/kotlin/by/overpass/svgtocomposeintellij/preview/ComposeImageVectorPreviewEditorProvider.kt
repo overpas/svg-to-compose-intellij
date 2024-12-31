@@ -19,6 +19,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import org.jetbrains.skiko.MainUIDispatcher
+import java.io.InputStream
 
 class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
 
@@ -29,13 +30,20 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
     override fun createEditor(project: Project, file: VirtualFile): FileEditor {
         initializeComposeMainDispatcherChecker()
         val textEditor = TextEditorProvider.getInstance().createEditor(project, file) as TextEditor
+        // invokespecial instructions should be avoided here, so constructors are moved to
+        // a separate method
+        return createTextEditorWithPreview(file.asInputStream(), textEditor)
+    }
+
+    private fun createTextEditorWithPreview(
+        inputStream: InputStream,
+        textEditor: TextEditor
+    ): TextEditorWithPreview {
         val coroutineScope = CoroutineScope(MainUIDispatcher + SupervisorJob())
         val composeImageVectorPreviewEditor = ComposeImageVectorPreviewEditor(
             viewModel = ComposeImageVectorPreviewViewModelImpl(
                 coroutineScope = coroutineScope,
-                iconDataParser = KotlinFileIconDataParser(
-                    file.asInputStream(),
-                ),
+                iconDataParser = KotlinFileIconDataParser(inputStream),
             ),
             coroutineScope = coroutineScope,
         )
