@@ -5,12 +5,15 @@ import by.overpass.svgtocomposeintellij.generator.presentation.validation.DirErr
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.Validatable
 
 sealed interface SvgToComposeState
+
 data class DataInput(
     val accessorName: Validatable<String, Unit> = Validatable(value = "MyIconPack"),
     val outputDir: Validatable<String, DirError> = Validatable(value = "", isValid = false),
     val vectorImagesDir: Validatable<String, DirError> = Validatable(value = "", isValid = false),
     val vectorImageType: VectorImageType = VectorImageType.SVG,
     val allAssetsPropertyName: Validatable<String, Unit> = Validatable(value = "AllIcons"),
+    val generateStringAccessor: Boolean = false,
+    val generatePreview: Boolean = true,
     val isInProgress: Boolean = false,
 ) : SvgToComposeState
 
