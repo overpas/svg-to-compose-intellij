@@ -13,20 +13,23 @@ class DataProcessingSvgIconsSvgIconsGenerator(
     private val processData: SvgToComposeDataProcessor,
 ) : SvgIconsGenerator {
 
-    override suspend fun generate(data: SvgToComposeData): Result<Unit> = withContext(Dispatchers.IO) {
-        val processedData = processData(data)
-        runCatching {
-            Svg2Compose.parse(
-                applicationIconPackage = processedData.applicationIconPackage,
-                accessorName = processedData.accessorName,
-                outputSourceDirectory = processedData.outputDir,
-                vectorsDirectory = processedData.vectorsDir,
-                type = processedData.vectorImageType.asVectorType(),
-                allAssetsPropertyName = processedData.allAssetsPropertyName,
-            )
-            Unit
+    override suspend fun generate(data: SvgToComposeData): Result<Unit> =
+        withContext(Dispatchers.IO) {
+            val processedData = processData(data)
+            runCatching {
+                Svg2Compose.parse(
+                    applicationIconPackage = processedData.applicationIconPackage,
+                    accessorName = processedData.accessorName,
+                    outputSourceDirectory = processedData.outputDir,
+                    vectorsDirectory = processedData.vectorsDir,
+                    type = processedData.vectorImageType.asVectorType(),
+                    allAssetsPropertyName = processedData.allAssetsPropertyName,
+                    generateStringAccessor = processedData.generateStringAccessor,
+                    generatePreview = processedData.generatePreview,
+                )
+                Unit
+            }
         }
-    }
 }
 
 private fun VectorImageType.asVectorType(): VectorType =

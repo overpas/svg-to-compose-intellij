@@ -9,4 +9,6 @@ data class SvgToComposeData(
     val vectorsDir: File,
     val vectorImageType: VectorImageType,
     val allAssetsPropertyName: String,
+    val generateStringAccessor: Boolean,
+    val generatePreview: Boolean,
 )

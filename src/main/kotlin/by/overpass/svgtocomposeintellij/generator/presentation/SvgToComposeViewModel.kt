@@ -8,7 +8,6 @@ import by.overpass.svgtocomposeintellij.generator.presentation.validation.DirErr
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.Validatable
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.ValidationResult
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.ValueValidator
-import java.io.File
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
 
 interface SvgToComposeViewModel {
 
@@ -35,6 +35,10 @@ interface SvgToComposeViewModel {
     fun onGenerate()
 
     fun onCleared()
+
+    fun onGenerateStringAccessorChanged(checked: Boolean)
+
+    fun onGeneratePreviewChanged(checked: Boolean)
 }
 
 class SvgToComposeViewModelImpl(
@@ -98,6 +102,7 @@ class SvgToComposeViewModelImpl(
                             detectVectorImagesType(vectorImagesDir)
                             null
                         }
+
                         is ValidationResult.Error -> validationResult.error
                     },
                 ),
@@ -145,6 +150,8 @@ class SvgToComposeViewModelImpl(
                         vectorsDir = File(currentState.vectorImagesDir.value),
                         vectorImageType = currentState.vectorImageType,
                         allAssetsPropertyName = currentState.allAssetsPropertyName.value,
+                        generateStringAccessor = currentState.generateStringAccessor,
+                        generatePreview = currentState.generatePreview,
                     )
                 ).fold(
                     onSuccess = {
@@ -160,6 +167,14 @@ class SvgToComposeViewModelImpl(
 
     override fun onCleared() {
         coroutineScope.cancel()
+    }
+
+    override fun onGenerateStringAccessorChanged(checked: Boolean) {
+        updateInput { it.copy(generateStringAccessor = checked) }
+    }
+
+    override fun onGeneratePreviewChanged(checked: Boolean) {
+        updateInput { it.copy(generatePreview = checked) }
     }
 
     private inline fun updateInput(dataInputUpdater: (DataInput) -> DataInput) {

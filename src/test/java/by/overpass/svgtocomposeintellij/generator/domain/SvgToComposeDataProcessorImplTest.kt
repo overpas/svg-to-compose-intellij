@@ -1,8 +1,8 @@
 package by.overpass.svgtocomposeintellij.generator.domain
 
-import java.io.File
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.io.File
 
 class SvgToComposeDataProcessorImplTest {
 
@@ -17,6 +17,8 @@ class SvgToComposeDataProcessorImplTest {
             vectorsDir = File(""),
             vectorImageType = VectorImageType.SVG,
             allAssetsPropertyName = "",
+            generateStringAccessor = false,
+            generatePreview = true,
         )
 
         assertEquals(data, processor(data))
@@ -31,6 +33,8 @@ class SvgToComposeDataProcessorImplTest {
             vectorsDir = File(""),
             vectorImageType = VectorImageType.SVG,
             allAssetsPropertyName = "",
+            generateStringAccessor = false,
+            generatePreview = true,
         )
         val expected = SvgToComposeData(
             applicationIconPackage = "com.example.icons",
@@ -39,6 +43,8 @@ class SvgToComposeDataProcessorImplTest {
             vectorsDir = File(""),
             vectorImageType = VectorImageType.SVG,
             allAssetsPropertyName = "",
+            generateStringAccessor = false,
+            generatePreview = true,
         )
 
         assertEquals(expected, processor(data))

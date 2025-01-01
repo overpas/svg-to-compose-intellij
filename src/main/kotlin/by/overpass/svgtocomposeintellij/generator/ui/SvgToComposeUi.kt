@@ -2,6 +2,7 @@ package by.overpass.svgtocomposeintellij.generator.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,7 @@ import com.darkrockstudios.libraries.mpfilepicker.DirectoryPicker
 import com.intellij.icons.AllIcons
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Outline
+import org.jetbrains.jewel.ui.component.CheckboxRow
 import org.jetbrains.jewel.ui.component.Dropdown
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.IconButton
@@ -58,6 +60,8 @@ fun SvgToComposePlugin(viewModel: SvgToComposeViewModel, modifier: Modifier = Mo
             onVectorImagesDirChange = viewModel::onVectorImagesDirChanged,
             onVectorImageTypeChange = viewModel::onVectorImageTypeChanged,
             onAllAssetsPropertyNameChange = viewModel::onAllAssetsPropertyNameChanged,
+            onGenerateStringAccessorChange = viewModel::onGenerateStringAccessorChanged,
+            onGeneratePreviewChange = viewModel::onGeneratePreviewChanged,
             modifier = modifier,
         )
 
@@ -78,6 +82,8 @@ private fun DataInputWithProgress(
     onVectorImagesDirChange: (String) -> Unit,
     onVectorImageTypeChange: (VectorImageType) -> Unit,
     onAllAssetsPropertyNameChange: (String) -> Unit,
+    onGenerateStringAccessorChange: (Boolean) -> Unit,
+    onGeneratePreviewChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -94,6 +100,8 @@ private fun DataInputWithProgress(
                 onVectorImagesDirChange = onVectorImagesDirChange,
                 onVectorImageTypeChange = onVectorImageTypeChange,
                 onAllAssetsPropertyNameChange = onAllAssetsPropertyNameChange,
+                onGenerateStringAccessorChange = onGenerateStringAccessorChange,
+                onGeneratePreviewChange = onGeneratePreviewChange,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -131,41 +139,53 @@ private fun DataInput(
     onVectorImagesDirChange: (String) -> Unit,
     onVectorImageTypeChange: (VectorImageType) -> Unit,
     onAllAssetsPropertyNameChange: (String) -> Unit,
+    onGenerateStringAccessorChange: (Boolean) -> Unit,
+    onGeneratePreviewChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
         Text(
             text = Bundle.message("generator_accessor_name_info"),
         )
-        Spacer(Modifier.height(8.dp))
         StringPropertyRow(
             propertyName = Bundle.message("generator_accessor_name_hint"),
             value = dataInput.accessorName,
             onValueChange = onAccessorNameChange,
         )
-        Spacer(Modifier.height(8.dp))
         BrowseDirRow(
             propertyName = Bundle.message("generator_output_directory_hint"),
             dir = dataInput.outputDir,
             onDirChange = onOutputDirChange,
         )
-        Spacer(Modifier.height(8.dp))
         BrowseDirRow(
             propertyName = Bundle.message("generator_vector_images_directory_hint"),
             dir = dataInput.vectorImagesDir,
             onDirChange = onVectorImagesDirChange,
         )
-        Spacer(Modifier.height(8.dp))
         VectorImageTypeRow(
             vectorImageType = dataInput.vectorImageType,
             onVectorImageTypeChange = onVectorImageTypeChange,
         )
-        Spacer(Modifier.height(8.dp))
         StringPropertyRow(
             propertyName = Bundle.message("generator_all_assets_property_hint"),
             value = dataInput.allAssetsPropertyName,
             onValueChange = onAllAssetsPropertyNameChange,
         )
+        CheckboxRow(
+            checked = dataInput.generateStringAccessor,
+            onCheckedChange = onGenerateStringAccessorChange,
+        ) {
+            Text(Bundle.message("generator_generate_string_accessor_checkbox_text"))
+        }
+        CheckboxRow(
+            checked = dataInput.generatePreview,
+            onCheckedChange = onGeneratePreviewChange,
+        ) {
+            Text(Bundle.message("generator_generate_preview_checkbox_text"))
+        }
     }
 }
 
