@@ -41,6 +41,7 @@ interface SvgToComposeViewModel {
     fun onGeneratePreviewChanged(checked: Boolean)
 }
 
+@Suppress("TooManyFunctions")
 class SvgToComposeViewModelImpl(
     targetDir: File,
     private val svgIconsGenerator: SvgIconsGenerator,
