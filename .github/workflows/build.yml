@@ -26,6 +26,6 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: ${{ matrix.jdk }}
-          java-version: 17
+          java-version: 21
       - name: Build
         run: ./gradlew build
