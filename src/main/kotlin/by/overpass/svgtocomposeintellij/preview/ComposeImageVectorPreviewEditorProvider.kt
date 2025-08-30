@@ -61,7 +61,7 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
 
     override fun getEditorTypeId(): String = "compose-image-vector-preview-editor"
 
-    override fun getPolicy(): FileEditorPolicy = FileEditorPolicy.HIDE_DEFAULT_EDITOR
+    override fun getPolicy(): FileEditorPolicy = FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR
 
     private fun VirtualFile.containsImageVector(): Boolean {
         return inputStream
