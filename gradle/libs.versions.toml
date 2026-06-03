@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.2.10"
+kotlin = "2.4.0"
 intellij-platform = "2.7.2"
 detekt = "1.23.8"
 junit = "4.13.2"
