@@ -33,8 +33,12 @@ import by.overpass.svgtocomposeintellij.generator.presentation.Finished
 import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeViewModel
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.DirError
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.Validatable
-import com.darkrockstudios.libraries.mpfilepicker.DirectoryPicker
 import com.intellij.icons.AllIcons
+import com.intellij.openapi.fileChooser.FileChooser
+import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.LocalFileSystem
+import org.jetbrains.jewel.foundation.ExperimentalJewelApi
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.ui.Outline
 import org.jetbrains.jewel.ui.component.CheckboxRow
@@ -46,8 +50,8 @@ import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 import org.jetbrains.jewel.ui.icon.PathIconKey
 
-private const val WEIGHT_LEFT = 1f
-private const val WEIGHT_RIGHT = 3f
+internal const val WEIGHT_LEFT = 1f
+internal const val WEIGHT_RIGHT = 3f
 
 @Composable
 fun SvgToComposePlugin(viewModel: SvgToComposeViewModel, modifier: Modifier = Modifier) {
@@ -146,7 +150,7 @@ private fun DataInput(
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
+    ) {
         Text(
             text = Bundle.message("generator_accessor_name_info"),
         )
@@ -189,6 +193,7 @@ private fun DataInput(
     }
 }
 
+@OptIn(ExperimentalJewelApi::class)
 @Composable
 private fun VectorImageTypeRow(
     vectorImageType: VectorImageType,
@@ -221,92 +226,6 @@ private fun VectorImageTypeRow(
             )
         }
     }
-}
-
-@OptIn(ExperimentalFoundationApi::class)
-@Composable
-private fun BrowseDirRow(
-    propertyName: String,
-    dir: Validatable<String, DirError>,
-    onDirChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier,
-    ) {
-        Text(
-            text = "$propertyName:",
-            modifier = Modifier.weight(WEIGHT_LEFT),
-        )
-        var showFilePicker by remember { mutableStateOf(false) }
-        val dirValueState = rememberTextFieldState(dir.value)
-        LaunchedEffect(dirValueState) {
-            snapshotFlow { dirValueState.text }.collect { charSequence ->
-                onDirChange(charSequence.toString())
-            }
-        }
-        OptionalTooltip(
-            tooltip = when (dir.error) {
-                null -> null
-                is DirError.Empty -> {
-                    { Text(Bundle.message("generator_output_directory_invalid_empty_message")) }
-                }
-
-                is DirError.InvalidPath -> {
-                    { Text(Bundle.message("generator_output_directory_invalid_path_message")) }
-                }
-
-                is DirError.NotADirectory -> {
-                    { Text(Bundle.message("generator_output_directory_invalid_not_directory_message")) }
-                }
-            },
-            modifier = Modifier.weight(WEIGHT_RIGHT),
-        ) {
-            DirTextField(
-                dirValueState = dirValueState,
-                outline = if (dir.isValid) Outline.None else Outline.Error,
-                onBrowseClick = { showFilePicker = !showFilePicker },
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
-        DirectoryPicker(
-            show = showFilePicker,
-            initialDirectory = if (dir.isValid) dir.value else System.getProperty("user.home"),
-            title = Bundle.message("generator_directory_title_template", propertyName),
-            onFileSelected = { selectedDir ->
-                if (selectedDir != null) {
-                    dirValueState.setTextAndPlaceCursorAtEnd(selectedDir)
-                } else {
-                    showFilePicker = false
-                }
-            },
-        )
-    }
-}
-
-@Composable
-private fun DirTextField(
-    dirValueState: TextFieldState,
-    outline: Outline,
-    onBrowseClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    TextField(
-        state = dirValueState,
-        trailingIcon = {
-            IconButton(
-                onClick = onBrowseClick
-            ) {
-                Icon(
-                    key = PathIconKey("expui/inline/browse.svg", AllIcons::class.java),
-                    contentDescription = Bundle.message("generator_picker_button_content_description"),
-                )
-            }
-        },
-        outline = outline,
-        modifier = modifier,
-    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
