@@ -12,7 +12,6 @@ import by.overpass.svgtocomposeintellij.generator.presentation.Finished
 import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeState
 import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeViewModel
 import by.overpass.svgtocomposeintellij.generator.presentation.isValid
-import by.overpass.svgtocomposeintellij.ui.jewelComposePanelCompat
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.JBColor
@@ -23,6 +22,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.jetbrains.jewel.bridge.JewelComposePanel
 import org.jetbrains.jewel.bridge.toComposeColor
 import org.jetbrains.jewel.foundation.ExperimentalJewelApi
 import org.jetbrains.jewel.foundation.enableNewSwingCompositing
@@ -68,7 +68,7 @@ class SvgToComposeDialog(
     @OptIn(ExperimentalJewelApi::class)
     override fun createCenterPanel(): JComponent {
         enableNewSwingCompositing()
-        return jewelComposePanelCompat {
+        return JewelComposePanel {
             val bgColor by remember(JBColor.PanelBackground.rgb) {
                 mutableStateOf(JBColor.PanelBackground.toComposeColor())
             }

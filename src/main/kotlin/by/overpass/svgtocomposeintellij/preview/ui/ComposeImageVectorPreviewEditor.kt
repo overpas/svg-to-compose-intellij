@@ -5,13 +5,13 @@ import androidx.compose.ui.Modifier
 import by.overpass.svgtocomposeintellij.Bundle
 import by.overpass.svgtocomposeintellij.preview.presentation.ComposeImageVectorPreviewIntent
 import by.overpass.svgtocomposeintellij.preview.presentation.ComposeImageVectorPreviewViewModel
-import by.overpass.svgtocomposeintellij.ui.jewelComposePanelCompat
 import com.intellij.openapi.fileEditor.FileEditor
 import com.intellij.openapi.fileEditor.FileEditorState
 import com.intellij.openapi.util.UserDataHolderBase
 import com.intellij.util.ui.JBUI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
+import org.jetbrains.jewel.bridge.JewelComposePanel
 import java.awt.Dimension
 import java.beans.PropertyChangeListener
 import javax.swing.JComponent
@@ -23,7 +23,7 @@ class ComposeImageVectorPreviewEditor(
     private val coroutineScope: CoroutineScope,
 ) : FileEditor, UserDataHolderBase() {
 
-    private val component = jewelComposePanelCompat {
+    private val component = JewelComposePanel {
         ComposeImageVectorPreview(
             viewModel = viewModel,
             modifier = Modifier.fillMaxSize(),
