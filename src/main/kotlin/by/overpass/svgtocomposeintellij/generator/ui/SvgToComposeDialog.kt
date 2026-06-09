@@ -2,6 +2,7 @@ package by.overpass.svgtocomposeintellij.generator.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,7 +36,7 @@ private const val DEFAULT_DIALOG_CONTENT_WIDTH = 820
 private const val DEFAULT_DIALOG_CONTENT_HEIGHT = 300
 
 class SvgToComposeDialog(
-    project: Project,
+    private val project: Project,
     private val viewModel: SvgToComposeViewModel,
 ) : DialogWrapper(project) {
 
@@ -71,11 +72,13 @@ class SvgToComposeDialog(
             val bgColor by remember(JBColor.PanelBackground.rgb) {
                 mutableStateOf(JBColor.PanelBackground.toComposeColor())
             }
-            SvgToComposePlugin(
-                viewModel = viewModel,
-                modifier = Modifier.fillMaxSize()
-                    .background(bgColor),
-            )
+            CompositionLocalProvider(LocalProject provides project) {
+                SvgToComposePlugin(
+                    viewModel = viewModel,
+                    modifier = Modifier.fillMaxSize()
+                        .background(bgColor),
+                )
+            }
         }.apply {
             preferredSize = JBUI.size(
                 Dimension(

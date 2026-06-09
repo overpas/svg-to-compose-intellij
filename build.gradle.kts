@@ -40,7 +40,8 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        create(properties["platform-type"].toString(), properties["platform-version"].toString())
+        intellijIdea(properties["platform-version"].toString())
+        composeUI()
         bundledPlugins(
             "com.intellij.java",
             "org.jetbrains.kotlin",
@@ -54,24 +55,6 @@ dependencies {
         exclude(group = "org.jetbrains.kotlinx")
         exclude(group = "xerces", module = "xercesImpl")
         exclude(group = "xml-apis", module = "xml-apis")
-    }
-    listOf(
-        compose.desktop.macos_x64,
-        compose.desktop.macos_arm64,
-        compose.desktop.windows_x64,
-        compose.desktop.linux_x64,
-        compose.desktop.linux_arm64,
-    ).forEach { artifact ->
-        implementation(artifact) {
-            exclude(group = "org.jetbrains.kotlinx")
-            exclude(group = "org.jetbrains.compose.material")
-        }
-    }
-    implementation(libs.jewel.ide.laf.bridge) {
-        exclude(group = "org.jetbrains.kotlinx")
-    }
-    implementation(libs.compose.multiplatform.file.picker) {
-        exclude(group = "org.jetbrains.kotlinx")
     }
     implementation(libs.lifecycle.common.jvm) {
         exclude(group = "org.jetbrains.kotlinx")
