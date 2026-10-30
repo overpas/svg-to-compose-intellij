@@ -11,38 +11,41 @@ class ColorConversionPositiveTest(
     private val expected: Long,
 ) {
 
+    private val sut = ::hexToLongColor
+
+    @Test
+    fun `colors are parsed correctly`() {
+        val actual = sut(colorString)
+
+        assertEquals(expected, actual)
+    }
+
     companion object {
 
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): Collection<Array<Any>> = listOf(
-            arrayOf(
-                "0xFF000000",
-                4278190080L,
-            ),
-            arrayOf(
-                "0x00000000",
-                0L,
-            ),
-            arrayOf(
-                "0xFFFFFFFF",
-                4294967295L,
-            ),
-            arrayOf(
-                "0xff000000",
-                4278190080L,
-            ),
-            arrayOf(
-                "0xffffffff",
-                4294967295L,
-            ),
-        )
-    }
-
-    @Test
-    fun `colors are parsed correctly`() {
-        val actual = hexToLongColor(colorString)
-
-        assertEquals(expected, actual)
+        fun data(): Collection<Array<Any>> =
+            listOf(
+                arrayOf(
+                    "0xFF000000",
+                    4_278_190_080L,
+                ),
+                arrayOf(
+                    "0x00000000",
+                    0L,
+                ),
+                arrayOf(
+                    "0xFFFFFFFF",
+                    4_294_967_295L,
+                ),
+                arrayOf(
+                    "0xff000000",
+                    4_278_190_080L,
+                ),
+                arrayOf(
+                    "0xffffffff",
+                    4_294_967_295L,
+                ),
+            )
     }
 }

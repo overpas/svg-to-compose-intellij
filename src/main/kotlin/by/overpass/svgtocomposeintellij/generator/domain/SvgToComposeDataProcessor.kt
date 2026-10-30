@@ -8,11 +8,11 @@ interface SvgToComposeDataProcessor {
 
     companion object : SvgToComposeDataProcessor {
 
-        private val pathRegex = ".*[/\\\\](kotlin|java)[/\\\\](.*)".toRegex()
+        private val pathRegex = """.*[/\\](kotlin|java)[/\\](.*)""".toRegex()
 
         override operator fun invoke(data: SvgToComposeData): SvgToComposeData {
             val initialPath = data.outputDir.path
-            val pkg = pathRegex.find(initialPath)?.groupValues?.get(2)
+            val pkg = pathRegex.find(initialPath)?.run { groupValues[2] }
             return if (pkg.isNullOrEmpty()) {
                 data
             } else {

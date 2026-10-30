@@ -28,3 +28,7 @@ local.properties
 .DS_Store
 
 .secrets
+
+# Claude
+.claude/worktrees/
+.codegraph
