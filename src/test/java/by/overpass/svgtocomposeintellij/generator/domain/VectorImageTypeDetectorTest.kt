@@ -11,36 +11,37 @@ class VectorImageTypeDetectorTest(
     private val expected: VectorImageType?,
 ) {
 
+    private val sut = VectorImageTypeDetector
+
+    @Test
+    fun test() {
+        val actual = sut.detect(path)
+
+        assertEquals(expected, actual)
+    }
+
     companion object {
 
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): Collection<Array<Any?>> = listOf(
-            arrayOf(
-                "src/test/resources/svg/",
-                VectorImageType.SVG,
-            ),
-            arrayOf(
-                "src/test/resources/xml/",
-                VectorImageType.DRAWABLE,
-            ),
-            arrayOf(
-                "src/test/resources/mixed/",
-                null,
-            ),
-            arrayOf(
-                "src/test/resources/svg-with-hidden-files/",
-                VectorImageType.SVG,
-            ),
-        )
-    }
-
-    private val detector = VectorImageTypeDetector
-
-    @Test
-    fun test() {
-        val actual = detector.detect(path)
-
-        assertEquals(expected, actual)
+        fun data(): Collection<Array<Any?>> =
+            listOf(
+                arrayOf(
+                    "src/test/resources/svg/",
+                    VectorImageType.SVG,
+                ),
+                arrayOf(
+                    "src/test/resources/xml/",
+                    VectorImageType.DRAWABLE,
+                ),
+                arrayOf(
+                    "src/test/resources/mixed/",
+                    null,
+                ),
+                arrayOf(
+                    "src/test/resources/svg-with-hidden-files/",
+                    VectorImageType.SVG,
+                ),
+            )
     }
 }

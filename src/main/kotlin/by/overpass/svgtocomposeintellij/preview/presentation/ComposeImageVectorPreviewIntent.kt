@@ -1,6 +1,6 @@
 package by.overpass.svgtocomposeintellij.preview.presentation
 
-sealed class ComposeImageVectorPreviewIntent {
+sealed interface ComposeImageVectorPreviewIntent {
 
-    data object ParseFile : ComposeImageVectorPreviewIntent()
+    data object ParseFile : ComposeImageVectorPreviewIntent
 }

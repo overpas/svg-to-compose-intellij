@@ -1,6 +1,7 @@
 package by.overpass.svgtocomposeintellij.generator.presentation
 
-import app.cash.turbine.test
+import app.cash.turbine.testIn
+import app.cash.turbine.turbineScope
 import by.overpass.svgtocomposeintellij.generator.domain.SvgIconsGenerator
 import by.overpass.svgtocomposeintellij.generator.domain.VectorImageType
 import by.overpass.svgtocomposeintellij.generator.domain.VectorImageTypeDetector
@@ -8,8 +9,6 @@ import by.overpass.svgtocomposeintellij.generator.presentation.validation.DirErr
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.Validatable
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.ValidationResult
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.ValueValidator
-import java.io.File
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -18,7 +17,7 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoInteractions
 import org.mockito.kotlin.whenever
-import org.mockito.kotlin.wheneverBlocking
+import java.io.File
 
 class SvgToComposeViewModelImplTest {
 
@@ -28,15 +27,12 @@ class SvgToComposeViewModelImplTest {
     private val nonStringEmptyValidator = mock<ValueValidator<String, Unit>>()
     private val directoryValidator = mock<ValueValidator<String, DirError>>()
 
-    private val testDispatcher = StandardTestDispatcher()
-
-    private val viewModel = SvgToComposeViewModelImpl(
+    private val sut = SvgToComposeViewModelImpl(
         targetDir = targetDir,
         svgIconsGenerator = svgIconsGenerator,
         vectorImageTypeDetector = vectorImageTypeDetector,
         nonStringEmptyValidator = nonStringEmptyValidator,
         directoryValidator = directoryValidator,
-        dispatcher = testDispatcher,
     )
 
     @Test
@@ -47,8 +43,8 @@ class SvgToComposeViewModelImplTest {
         )
         whenever(nonStringEmptyValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
-        viewModel.onAccessorNameChanged("NewAccessorName")
-        val actual = viewModel.state.value
+        sut.onAccessorNameChanged("NewAccessorName")
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
@@ -61,8 +57,8 @@ class SvgToComposeViewModelImplTest {
         )
         whenever(nonStringEmptyValidator.validate(any())).thenReturn(ValidationResult.Error(Unit))
 
-        viewModel.onAccessorNameChanged("")
-        val actual = viewModel.state.value
+        sut.onAccessorNameChanged("")
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
@@ -75,8 +71,8 @@ class SvgToComposeViewModelImplTest {
         )
         whenever(nonStringEmptyValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
-        viewModel.onAllAssetsPropertyNameChanged("New")
-        val actual = viewModel.state.value
+        sut.onAllAssetsPropertyNameChanged("New")
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
@@ -89,8 +85,8 @@ class SvgToComposeViewModelImplTest {
         )
         whenever(nonStringEmptyValidator.validate(any())).thenReturn(ValidationResult.Error(Unit))
 
-        viewModel.onAllAssetsPropertyNameChanged("")
-        val actual = viewModel.state.value
+        sut.onAllAssetsPropertyNameChanged("")
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
@@ -102,8 +98,8 @@ class SvgToComposeViewModelImplTest {
         )
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
-        viewModel.onOutputDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
-        val actual = viewModel.state.value
+        sut.onOutputDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
@@ -115,8 +111,8 @@ class SvgToComposeViewModelImplTest {
         )
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Error(DirError.Empty))
 
-        viewModel.onOutputDirChanged("")
-        val actual = viewModel.state.value
+        sut.onOutputDirChanged("")
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
@@ -129,8 +125,8 @@ class SvgToComposeViewModelImplTest {
         )
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
-        viewModel.onVectorImagesDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
-        val actual = viewModel.state.value
+        sut.onVectorImagesDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
@@ -139,9 +135,11 @@ class SvgToComposeViewModelImplTest {
     fun `vectorImageTypeDetector is triggered when vectorImagesDirChanged updated to a valid value`() {
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
 
-        viewModel.onVectorImagesDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
+        sut.onVectorImagesDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
 
-        verify(vectorImageTypeDetector).detect("${File.pathSeparator}new${File.pathSeparator}dir")
+        verify(vectorImageTypeDetector) {
+            1 * { detect("${File.pathSeparator}new${File.pathSeparator}dir") }
+        }
     }
 
     @Test
@@ -154,8 +152,8 @@ class SvgToComposeViewModelImplTest {
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
         whenever(vectorImageTypeDetector.detect(any())).thenReturn(VectorImageType.DRAWABLE)
 
-        viewModel.onVectorImagesDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
-        val actual = viewModel.state.value
+        sut.onVectorImagesDirChanged("${File.pathSeparator}new${File.pathSeparator}dir")
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
@@ -168,18 +166,17 @@ class SvgToComposeViewModelImplTest {
         )
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Error(DirError.Empty))
 
-        viewModel.onVectorImagesDirChanged("")
-        val actual = viewModel.state.value
+        sut.onVectorImagesDirChanged("")
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
 
     @Test
     fun `vectorImageTypeDetector is NOT triggered when vectorImagesDirChanged updated to an invalid value`() {
-
         whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Error(DirError.Empty))
 
-        viewModel.onVectorImagesDirChanged("")
+        sut.onVectorImagesDirChanged("")
 
         verifyNoInteractions(vectorImageTypeDetector)
     }
@@ -191,65 +188,60 @@ class SvgToComposeViewModelImplTest {
             vectorImageType = VectorImageType.DRAWABLE,
         )
 
-        viewModel.onVectorImageTypeChanged(VectorImageType.DRAWABLE)
-        val actual = viewModel.state.value
+        sut.onVectorImageTypeChanged(VectorImageType.DRAWABLE)
+        val actual = sut.state.value
 
         assertEquals(expected, actual)
     }
 
     @Test
-    fun `coroutineScope is closed when ViewModel is cleared`() {
-        whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
-        viewModel.onVectorImagesDirChanged("${File.pathSeparator}dir")
+    fun `progress is shown and svg icons generated successfully`() =
+        runTest {
+            turbineScope {
+                val expected = listOf(
+                    DataInput(
+                        outputDir = Validatable("${File.pathSeparator}dir"),
+                        vectorImagesDir = Validatable("${File.pathSeparator}dir"),
+                        isInProgress = true,
+                    ),
+                    Finished,
+                )
+                whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
+                sut.onVectorImagesDirChanged("${File.pathSeparator}dir")
+                whenever { svgIconsGenerator.generate(any()) }.thenReturn(Result.success(Unit))
+                val states = sut.state.testIn(backgroundScope)
+                states.skipItems(1)
 
-        viewModel.onCleared()
-        viewModel.onGenerate()
+                sut.onGenerate()
+                val actual = listOf(states.awaitItem(), states.awaitItem())
 
-        verifyNoInteractions(svgIconsGenerator)
-    }
+                assertEquals(expected, actual)
+            }
+        }
 
     @Test
-    fun `progress is shown and svg icons generated successfully`() = runTest(testDispatcher) {
-        whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
-        viewModel.onVectorImagesDirChanged("${File.pathSeparator}dir")
-        wheneverBlocking { svgIconsGenerator.generate(any()) }.thenReturn(Result.success(Unit))
+    fun `progress is shown and svg icons generation failed`() =
+        runTest {
+            turbineScope {
+                val exception = RuntimeException("Test")
+                val expected = listOf(
+                    DataInput(
+                        outputDir = Validatable("${File.pathSeparator}dir"),
+                        vectorImagesDir = Validatable("${File.pathSeparator}dir"),
+                        isInProgress = true,
+                    ),
+                    Error(exception),
+                )
+                whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
+                sut.onVectorImagesDirChanged("${File.pathSeparator}dir")
+                whenever { svgIconsGenerator.generate(any()) }.thenReturn(runCatching { throw exception })
+                val states = sut.state.testIn(backgroundScope)
+                states.skipItems(1)
 
-        viewModel.state.test {
-            val initialState = DataInput(
-                outputDir = Validatable("${File.pathSeparator}dir"),
-                vectorImagesDir = Validatable("${File.pathSeparator}dir"),
-                isInProgress = false,
-            )
-            assertEquals(initialState, awaitItem())
+                sut.onGenerate()
+                val actual = listOf(states.awaitItem(), states.awaitItem())
 
-            viewModel.onGenerate()
-
-            val awaitItem = awaitItem()
-            assertEquals(initialState.copy(isInProgress = true), awaitItem)
-            assertEquals(Finished, awaitItem())
+                assertEquals(expected, actual)
+            }
         }
-    }
-
-    @Test
-    fun `progress is shown and svg icons generation failed`() = runTest(testDispatcher) {
-        whenever(directoryValidator.validate(any())).thenReturn(ValidationResult.Ok)
-        viewModel.onVectorImagesDirChanged("${File.pathSeparator}dir")
-        val exception = RuntimeException("Test")
-        wheneverBlocking { svgIconsGenerator.generate(any()) }.thenReturn(Result.failure(exception))
-
-        viewModel.state.test {
-            val initialState = DataInput(
-                outputDir = Validatable("${File.pathSeparator}dir"),
-                vectorImagesDir = Validatable("${File.pathSeparator}dir"),
-                isInProgress = false,
-            )
-            assertEquals(initialState, awaitItem())
-
-            viewModel.onGenerate()
-
-            val awaitItem = awaitItem()
-            assertEquals(initialState.copy(isInProgress = true), awaitItem)
-            assertEquals(Error(exception), awaitItem())
-        }
-    }
 }

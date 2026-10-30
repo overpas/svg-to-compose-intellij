@@ -11,36 +11,37 @@ class ProperDirValidatorTest(
     private val validationResult: ValidationResult<DirError>,
 ) {
 
+    private val sut = ProperDirValidator
+
+    @Test
+    fun `test passed directory is validated correctly`() {
+        val actual = sut.validate(file)
+
+        assertEquals(validationResult, actual)
+    }
+
     companion object {
 
         @JvmStatic
         @Parameterized.Parameters
-        fun data(): Collection<Array<Any>> = listOf(
-            arrayOf(
-                "",
-                ValidationResult.Error(DirError.Empty),
-            ),
-            arrayOf(
-                "src/test/resources/test_file.txt",
-                ValidationResult.Error(DirError.NotADirectory),
-            ),
-            arrayOf(
-                "src/test/resources/error",
-                ValidationResult.Error(DirError.InvalidPath),
-            ),
-            arrayOf(
-                "src/test/resources/",
-                ValidationResult.Ok,
-            ),
-        )
-    }
-
-    private val properDirValidator = ProperDirValidator
-
-    @Test
-    fun `test passed directory is validated correctly`() {
-        val actual = properDirValidator.validate(file)
-
-        assertEquals(validationResult, actual)
+        fun data(): Collection<Array<Any>> =
+            listOf(
+                arrayOf(
+                    "",
+                    ValidationResult.Error(DirError.Empty),
+                ),
+                arrayOf(
+                    "src/test/resources/test_file.txt",
+                    ValidationResult.Error(DirError.NotADirectory),
+                ),
+                arrayOf(
+                    "src/test/resources/error",
+                    ValidationResult.Error(DirError.InvalidPath),
+                ),
+                arrayOf(
+                    "src/test/resources/",
+                    ValidationResult.Ok,
+                ),
+            )
     }
 }

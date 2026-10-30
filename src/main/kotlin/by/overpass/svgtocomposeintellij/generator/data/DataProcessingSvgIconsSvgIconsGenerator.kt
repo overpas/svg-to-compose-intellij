@@ -6,15 +6,17 @@ import by.overpass.svgtocomposeintellij.generator.domain.SvgIconsGenerator
 import by.overpass.svgtocomposeintellij.generator.domain.SvgToComposeData
 import by.overpass.svgtocomposeintellij.generator.domain.SvgToComposeDataProcessor
 import by.overpass.svgtocomposeintellij.generator.domain.VectorImageType
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class DataProcessingSvgIconsSvgIconsGenerator(
     private val processData: SvgToComposeDataProcessor,
+    private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : SvgIconsGenerator {
 
     override suspend fun generate(data: SvgToComposeData): Result<Unit> =
-        withContext(Dispatchers.IO) {
+        withContext(ioDispatcher) {
             val processedData = processData(data)
             runCatching {
                 Svg2Compose.parse(
@@ -24,16 +26,15 @@ class DataProcessingSvgIconsSvgIconsGenerator(
                     vectorsDirectory = processedData.vectorsDir,
                     type = processedData.vectorImageType.asVectorType(),
                     allAssetsPropertyName = processedData.allAssetsPropertyName,
-                    generateStringAccessor = processedData.generateStringAccessor,
-                    generatePreview = processedData.generatePreview,
+                    generateStringAccessor = processedData.isStringAccessorGenerated,
+                    generatePreview = processedData.isPreviewGenerated,
                 )
-                Unit
-            }
+            }.map { }
+        }
+
+    private fun VectorImageType.asVectorType(): VectorType =
+        when (this) {
+            VectorImageType.SVG -> VectorType.SVG
+            VectorImageType.DRAWABLE -> VectorType.DRAWABLE
         }
 }
-
-private fun VectorImageType.asVectorType(): VectorType =
-    when (this) {
-        VectorImageType.SVG -> VectorType.SVG
-        VectorImageType.DRAWABLE -> VectorType.DRAWABLE
-    }

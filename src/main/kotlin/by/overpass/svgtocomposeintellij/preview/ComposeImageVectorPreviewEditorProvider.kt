@@ -1,10 +1,10 @@
 package by.overpass.svgtocomposeintellij.preview
 
 import by.overpass.svgtocomposeintellij.Bundle
-import by.overpass.svgtocomposeintellij.initializeComposeMainDispatcherChecker
+import by.overpass.svgtocomposeintellij.initMainDispatcherChecker
 import by.overpass.svgtocomposeintellij.preview.data.KotlinFileIconDataParser
-import by.overpass.svgtocomposeintellij.preview.data.asInputStream
-import by.overpass.svgtocomposeintellij.preview.data.imageVectorDeclarationPattern
+import by.overpass.svgtocomposeintellij.preview.data.containsImageVector
+import by.overpass.svgtocomposeintellij.preview.data.readContent
 import by.overpass.svgtocomposeintellij.preview.presentation.ComposeImageVectorPreviewViewModelImpl
 import by.overpass.svgtocomposeintellij.preview.ui.ComposeImageVectorPreviewEditor
 import com.intellij.openapi.fileEditor.FileEditor
@@ -16,38 +16,33 @@ import com.intellij.openapi.fileEditor.impl.text.TextEditorProvider
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import org.jetbrains.skiko.MainUIDispatcher
-import java.io.InputStream
 
-class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
+class ComposeImageVectorPreviewEditorProvider :
+    FileEditorProvider,
+    DumbAware {
 
-    override fun accept(project: Project, file: VirtualFile): Boolean {
-        return file.containsImageVector()
-    }
+    override fun accept(
+        project: Project,
+        file: VirtualFile,
+    ): Boolean =
+        file.containsImageVector()
 
-    override fun createEditor(project: Project, file: VirtualFile): FileEditor {
-        initializeComposeMainDispatcherChecker()
-        val textEditor = TextEditorProvider.getInstance().createEditor(project, file) as TextEditor
-        val inputStream = file.asInputStream()
-        return createTextEditorWithPreview(inputStream, textEditor)
+    override fun createEditor(
+        project: Project,
+        file: VirtualFile,
+    ): FileEditor {
+        initMainDispatcherChecker()
+        val textEditor = TextEditor::class.java.cast(TextEditorProvider.getInstance().createEditor(project, file))
+        return createTextEditorWithPreview(file, textEditor)
     }
 
     private fun createTextEditorWithPreview(
-        inputStream: InputStream,
-        textEditor: TextEditor
+        file: VirtualFile,
+        textEditor: TextEditor,
     ): TextEditorWithPreview {
-        val coroutineScope = CoroutineScope(MainUIDispatcher + SupervisorJob())
-        val iconDataParser = KotlinFileIconDataParser(inputStream)
-        val viewModel = ComposeImageVectorPreviewViewModelImpl(
-            coroutineScope = coroutineScope,
-            iconDataParser = iconDataParser,
-        )
-        val composeImageVectorPreviewEditor = ComposeImageVectorPreviewEditor(
-            viewModel = viewModel,
-            coroutineScope = coroutineScope,
-        )
+        val iconDataParser = KotlinFileIconDataParser(readSource = file::readContent)
+        val viewModel = ComposeImageVectorPreviewViewModelImpl(iconDataParser = iconDataParser)
+        val composeImageVectorPreviewEditor = ComposeImageVectorPreviewEditor(viewModel = viewModel)
         val name = Bundle.message("preview_editor_title")
         return TextEditorWithPreview(
             myEditor = textEditor,
@@ -59,17 +54,9 @@ class ComposeImageVectorPreviewEditorProvider : FileEditorProvider, DumbAware {
         )
     }
 
-    override fun getEditorTypeId(): String = "compose-image-vector-preview-editor"
+    override fun getEditorTypeId(): String =
+        "compose-image-vector-preview-editor"
 
-    override fun getPolicy(): FileEditorPolicy = FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR
-
-    private fun VirtualFile.containsImageVector(): Boolean {
-        return inputStream
-            .bufferedReader()
-            .useLines { lines ->
-                lines.find { line ->
-                    imageVectorDeclarationPattern.containsMatchIn(line)
-                } != null
-            }
-    }
+    override fun getPolicy(): FileEditorPolicy =
+        FileEditorPolicy.PLACE_AFTER_DEFAULT_EDITOR
 }

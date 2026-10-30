@@ -1,27 +1,18 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("java")
-    alias(libs.plugins.intellij.platform)
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.detekt)
-    alias(libs.plugins.compose.desktop)
+    id("kotlin-jvm")
+    id("static-analysis")
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.desktop)
+    alias(libs.plugins.intellij.platform)
 }
 
-java {
-    sourceCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
-    targetCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
-}
+fun environment(key: String) =
+    providers.environmentVariable(key)
 
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(properties["jvm-version"].toString())
-    }
-}
-
-fun environment(key: String) = providers.environmentVariable(key)
+val kotlinxGroup = "org.jetbrains.kotlinx"
 
 group = "by.overpass"
 version = properties["version"].toString()
@@ -52,21 +43,20 @@ dependencies {
         testFramework(TestFrameworkType.Platform)
     }
     implementation(libs.svg.to.compose) {
-        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = kotlinxGroup)
         exclude(group = "xerces", module = "xercesImpl")
         exclude(group = "xml-apis", module = "xml-apis")
     }
     implementation(libs.lifecycle.common.jvm) {
-        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = kotlinxGroup)
     }
     implementation(libs.lifecycle.runtime.desktop) {
-        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = kotlinxGroup)
     }
-    detektPlugins(libs.detekt.compose.rules)
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)
-    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.turbine)
 }
 
