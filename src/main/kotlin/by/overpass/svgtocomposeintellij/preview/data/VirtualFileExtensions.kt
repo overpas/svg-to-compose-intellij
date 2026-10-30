@@ -1,17 +1,24 @@
 package by.overpass.svgtocomposeintellij.preview.data
 
 import com.intellij.openapi.vfs.VirtualFile
-import java.io.InputStream
 import java.net.JarURLConnection
-import java.net.URL
-import kotlin.io.path.inputStream
+import java.net.URI
+import kotlin.io.path.readText
 
-fun VirtualFile.asInputStream(): InputStream {
-    return if (fileSystem.protocol == "jar") {
-        val url = URL("jar:file:$path")
-        val jarUrlConnection = url.openConnection() as JarURLConnection
-        jarUrlConnection.inputStream
+fun VirtualFile.readContent(): String =
+    if (fileSystem.protocol == "jar") {
+        val url = URI("jar:file:$path").toURL()
+        val jarUrlConnection = JarURLConnection::class.java.cast(url.openConnection())
+        jarUrlConnection.inputStream.bufferedReader().use { reader -> reader.readText() }
     } else {
-        toNioPath().inputStream()
+        toNioPath().readText()
     }
-}
+
+fun VirtualFile.containsImageVector(): Boolean =
+    inputStream
+        .bufferedReader()
+        .useLines { lines ->
+            lines.any { line ->
+                imageVectorDeclarationPattern.containsMatchIn(line)
+            }
+        }

@@ -8,14 +8,9 @@ import by.overpass.svgtocomposeintellij.generator.presentation.validation.DirErr
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.Validatable
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.ValidationResult
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.ValueValidator
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import java.io.File
 
 interface SvgToComposeViewModel {
@@ -32,26 +27,20 @@ interface SvgToComposeViewModel {
 
     fun onAllAssetsPropertyNameChanged(allAssetsPropertyName: String)
 
-    fun onGenerate()
+    suspend fun onGenerate()
 
-    fun onCleared()
+    fun onStringAccessorToggled(checked: Boolean)
 
-    fun onGenerateStringAccessorChanged(checked: Boolean)
-
-    fun onGeneratePreviewChanged(checked: Boolean)
+    fun onPreviewToggled(checked: Boolean)
 }
 
-@Suppress("TooManyFunctions")
 class SvgToComposeViewModelImpl(
     targetDir: File,
     private val svgIconsGenerator: SvgIconsGenerator,
     private val vectorImageTypeDetector: VectorImageTypeDetector,
     private val nonStringEmptyValidator: ValueValidator<String, Unit>,
     private val directoryValidator: ValueValidator<String, DirError>,
-    dispatcher: CoroutineDispatcher,
 ) : SvgToComposeViewModel {
-
-    private val coroutineScope = CoroutineScope(dispatcher + SupervisorJob())
 
     override val state = MutableStateFlow<SvgToComposeState>(
         DataInput(
@@ -104,7 +93,9 @@ class SvgToComposeViewModelImpl(
                             null
                         }
 
-                        is ValidationResult.Error -> validationResult.error
+                        is ValidationResult.Error -> {
+                            validationResult.error
+                        }
                     },
                 ),
             )
@@ -138,44 +129,38 @@ class SvgToComposeViewModelImpl(
         }
     }
 
-    override fun onGenerate() {
-        coroutineScope.launch {
-            updateInput { old -> old.copy(isInProgress = true) }
-            val currentState = state.value
-            if (currentState is DataInput) {
-                svgIconsGenerator.generate(
-                    SvgToComposeData(
-                        applicationIconPackage = "",
-                        accessorName = currentState.accessorName.value,
-                        outputDir = File(currentState.outputDir.value),
-                        vectorsDir = File(currentState.vectorImagesDir.value),
-                        vectorImageType = currentState.vectorImageType,
-                        allAssetsPropertyName = currentState.allAssetsPropertyName.value,
-                        generateStringAccessor = currentState.generateStringAccessor,
-                        generatePreview = currentState.generatePreview,
-                    )
-                ).fold(
-                    onSuccess = {
-                        state.value = Finished
-                    },
-                    onFailure = { throwable ->
-                        state.value = Error(throwable)
-                    }
-                )
-            }
+    override suspend fun onGenerate() {
+        updateInput { old -> old.copy(isInProgress = true) }
+        val currentState = state.value
+        if (currentState is DataInput) {
+            svgIconsGenerator.generate(
+                SvgToComposeData(
+                    applicationIconPackage = "",
+                    accessorName = currentState.accessorName.value,
+                    outputDir = File(currentState.outputDir.value),
+                    vectorsDir = File(currentState.vectorImagesDir.value),
+                    vectorImageType = currentState.vectorImageType,
+                    allAssetsPropertyName = currentState.allAssetsPropertyName.value,
+                    isStringAccessorGenerated = currentState.isStringAccessorGenerated,
+                    isPreviewGenerated = currentState.isPreviewGenerated,
+                ),
+            ).fold(
+                onSuccess = {
+                    state.value = Finished
+                },
+                onFailure = { throwable ->
+                    state.value = Error(throwable)
+                },
+            )
         }
     }
 
-    override fun onCleared() {
-        coroutineScope.cancel()
+    override fun onStringAccessorToggled(checked: Boolean) {
+        updateInput { it.copy(isStringAccessorGenerated = checked) }
     }
 
-    override fun onGenerateStringAccessorChanged(checked: Boolean) {
-        updateInput { it.copy(generateStringAccessor = checked) }
-    }
-
-    override fun onGeneratePreviewChanged(checked: Boolean) {
-        updateInput { it.copy(generatePreview = checked) }
+    override fun onPreviewToggled(checked: Boolean) {
+        updateInput { it.copy(isPreviewGenerated = checked) }
     }
 
     private inline fun updateInput(dataInputUpdater: (DataInput) -> DataInput) {

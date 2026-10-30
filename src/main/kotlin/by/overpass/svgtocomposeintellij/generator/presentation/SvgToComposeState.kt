@@ -12,20 +12,19 @@ data class DataInput(
     val vectorImagesDir: Validatable<String, DirError> = Validatable(value = "", isValid = false),
     val vectorImageType: VectorImageType = VectorImageType.SVG,
     val allAssetsPropertyName: Validatable<String, Unit> = Validatable(value = "AllIcons"),
-    val generateStringAccessor: Boolean = false,
-    val generatePreview: Boolean = true,
+    val isStringAccessorGenerated: Boolean = false,
+    val isPreviewGenerated: Boolean = true,
     val isInProgress: Boolean = false,
 ) : SvgToComposeState
 
-data class Error(
-    val throwable: Throwable,
-) : SvgToComposeState
+data class Error(val throwable: Throwable) : SvgToComposeState
 
 data object Finished : SvgToComposeState
 
 val SvgToComposeState.isValid: Boolean
-    get() = if (this is DataInput) {
-        accessorName.isValid && outputDir.isValid && vectorImagesDir.isValid && allAssetsPropertyName.isValid
-    } else {
-        false
-    }
+    get() =
+        this is DataInput &&
+            accessorName.isValid &&
+            outputDir.isValid &&
+            vectorImagesDir.isValid &&
+            allAssetsPropertyName.isValid

@@ -2,31 +2,24 @@ package by.overpass.svgtocomposeintellij.generator.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import by.overpass.svgtocomposeintellij.Bundle
+import by.overpass.svgtocomposeintellij.ProjectScopeProviderService
 import by.overpass.svgtocomposeintellij.generator.presentation.Finished
 import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeState
 import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeViewModel
 import by.overpass.svgtocomposeintellij.generator.presentation.isValid
+import com.intellij.openapi.components.service
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.DialogWrapper
 import com.intellij.ui.JBColor
 import com.intellij.util.ui.JBUI
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.jetbrains.jewel.bridge.JewelComposePanel
 import org.jetbrains.jewel.bridge.toComposeColor
-import org.jetbrains.jewel.foundation.ExperimentalJewelApi
-import org.jetbrains.jewel.foundation.enableNewSwingCompositing
-import org.jetbrains.skiko.MainUIDispatcher
 import java.awt.Dimension
 import java.awt.event.ActionEvent
 import javax.swing.Action
@@ -34,24 +27,19 @@ import javax.swing.JComponent
 
 private const val DEFAULT_DIALOG_CONTENT_WIDTH = 820
 private const val DEFAULT_DIALOG_CONTENT_HEIGHT = 300
+private const val SWING_COMPOSITING_PROPERTY = "compose.swing.render.on.graphics"
 
 class SvgToComposeDialog(
     private val project: Project,
     private val viewModel: SvgToComposeViewModel,
 ) : DialogWrapper(project) {
 
-    private val coroutineScope = CoroutineScope(
-        SupervisorJob() + MainUIDispatcher + CoroutineName(this::class.java.simpleName),
-    )
-
     private val generateAction = GenerateAction(Bundle.message("generator_button_confirm"))
 
     init {
         init()
         title = Bundle.message("generator_title")
-        viewModel.state
-            .onEach(::processState)
-            .launchIn(coroutineScope)
+        processState(viewModel.state.value)
     }
 
     private fun processState(state: SvgToComposeState) {
@@ -65,20 +53,22 @@ class SvgToComposeDialog(
         close(OK_EXIT_CODE, true)
     }
 
-    @OptIn(ExperimentalJewelApi::class)
     override fun createCenterPanel(): JComponent {
-        enableNewSwingCompositing()
+        System.setProperty(SWING_COMPOSITING_PROPERTY, true.toString())
         return JewelComposePanel {
             val bgColor by remember(JBColor.PanelBackground.rgb) {
                 mutableStateOf(JBColor.PanelBackground.toComposeColor())
             }
-            CompositionLocalProvider(LocalProject provides project) {
-                SvgToComposePlugin(
-                    viewModel = viewModel,
-                    modifier = Modifier.fillMaxSize()
-                        .background(bgColor),
-                )
+            LaunchedEffect(viewModel) {
+                viewModel.state.collect(::processState)
             }
+            SvgToComposePlugin(
+                viewModel = viewModel,
+                project = project,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(bgColor),
+            )
         }.apply {
             preferredSize = JBUI.size(
                 Dimension(
@@ -89,18 +79,15 @@ class SvgToComposeDialog(
         }
     }
 
-    override fun getOKAction(): Action = generateAction
-
-    override fun dispose() {
-        super.dispose()
-        coroutineScope.cancel()
-        viewModel.onCleared()
-    }
+    override fun getOKAction(): Action =
+        generateAction
 
     private inner class GenerateAction(name: String) : DialogWrapperAction(name) {
 
         override fun doAction(e: ActionEvent?) {
-            viewModel.onGenerate()
+            project.service<ProjectScopeProviderService>().launch {
+                viewModel.onGenerate()
+            }
         }
     }
 }

@@ -5,19 +5,21 @@ import org.junit.Test
 
 class CantBeEmptyStringValidatorTest {
 
-    private val validator = CantBeEmptyStringValidator
+    private val sut = CantBeEmptyStringValidator
 
     @Test
     fun `test not empty string validator returns result ok`() {
-        val result = validator.validate("value")
+        val result = sut.validate("value")
 
         assertEquals(ValidationResult.Ok, result)
     }
 
     @Test
     fun `test not empty string validator returns result error`() {
-        val result = validator.validate("")
+        val expected = ValidationResult.Error(Unit)
 
-        assertEquals(ValidationResult.Error(Unit), result)
+        val result = sut.validate("")
+
+        assertEquals(expected, result)
     }
 }

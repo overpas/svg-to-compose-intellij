@@ -6,7 +6,7 @@ import java.io.File
 
 class SvgToComposeDataProcessorImplTest {
 
-    private val processor = SvgToComposeDataProcessor
+    private val sut = SvgToComposeDataProcessor
 
     @Test
     fun `test data unchanged when package is empty`() {
@@ -17,11 +17,13 @@ class SvgToComposeDataProcessorImplTest {
             vectorsDir = File(""),
             vectorImageType = VectorImageType.SVG,
             allAssetsPropertyName = "",
-            generateStringAccessor = false,
-            generatePreview = true,
+            isStringAccessorGenerated = false,
+            isPreviewGenerated = true,
         )
 
-        assertEquals(data, processor(data))
+        val actual = sut(data)
+
+        assertEquals(data, actual)
     }
 
     @Test
@@ -33,8 +35,8 @@ class SvgToComposeDataProcessorImplTest {
             vectorsDir = File(""),
             vectorImageType = VectorImageType.SVG,
             allAssetsPropertyName = "",
-            generateStringAccessor = false,
-            generatePreview = true,
+            isStringAccessorGenerated = false,
+            isPreviewGenerated = true,
         )
         val expected = SvgToComposeData(
             applicationIconPackage = "com.example.icons",
@@ -43,10 +45,12 @@ class SvgToComposeDataProcessorImplTest {
             vectorsDir = File(""),
             vectorImageType = VectorImageType.SVG,
             allAssetsPropertyName = "",
-            generateStringAccessor = false,
-            generatePreview = true,
+            isStringAccessorGenerated = false,
+            isPreviewGenerated = true,
         )
 
-        assertEquals(expected, processor(data))
+        val actual = sut(data)
+
+        assertEquals(expected, actual)
     }
 }

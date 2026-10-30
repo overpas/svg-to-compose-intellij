@@ -12,6 +12,8 @@ plugins {
 fun environment(key: String) =
     providers.environmentVariable(key)
 
+val kotlinxGroup = "org.jetbrains.kotlinx"
+
 group = "by.overpass"
 version = properties["version"].toString()
 
@@ -41,20 +43,20 @@ dependencies {
         testFramework(TestFrameworkType.Platform)
     }
     implementation(libs.svg.to.compose) {
-        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = kotlinxGroup)
         exclude(group = "xerces", module = "xercesImpl")
         exclude(group = "xml-apis", module = "xml-apis")
     }
     implementation(libs.lifecycle.common.jvm) {
-        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = kotlinxGroup)
     }
     implementation(libs.lifecycle.runtime.desktop) {
-        exclude(group = "org.jetbrains.kotlinx")
+        exclude(group = kotlinxGroup)
     }
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)
-    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.turbine)
 }
 
