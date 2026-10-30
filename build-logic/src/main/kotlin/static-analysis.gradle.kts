@@ -20,6 +20,9 @@ dependencies {
 
     detektPlugins(libs.detekt.compose.rules)
     detektPlugins(libs.detekt.ktlint.wrapper)
+    detektPlugins(libs.intellij.inspections.gradle.best.practices)
+    detektPlugins(libs.intellij.inspections.jvm.all)
+    detektPlugins(libs.intellij.inspections.kotlin.all)
 }
 
 tasks.withType<Detekt>().configureEach {

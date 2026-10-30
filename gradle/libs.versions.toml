@@ -9,12 +9,16 @@ mockito-kotlin = "6.3.0"
 compose-desktop = "1.11.1"
 turbine = "1.2.1"
 compose-rules = "0.6.6"
+intellij-inspections = "0.2.0"
 lifecycle = "2.9.2"
 
 [libraries]
 svg-to-compose = { group = "com.github.DevSrSouza", name = "svg-to-compose", version.ref = "svg-to-compose" }
 detekt-compose-rules = { module = "io.nlopez.compose.rules:detekt", version.ref = "compose-rules" }
 detekt-ktlint-wrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
+intellij-inspections-gradle-best-practices = { module = "io.github.overpas:intellij-inspections-gradle-best-practices", version.ref = "intellij-inspections" }
+intellij-inspections-jvm-all = { module = "io.github.overpas:intellij-inspections-jvm-all", version.ref = "intellij-inspections" }
+intellij-inspections-kotlin-all = { module = "io.github.overpas:intellij-inspections-kotlin-all", version.ref = "intellij-inspections" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }

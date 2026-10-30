@@ -1,6 +1,6 @@
 ---
 name: update-detekt-rules
-description: Update the custom detekt rule set jars (overpas-* rule sets from github.com/overpas/detekt-rules, intellij-* rule sets from github.com/overpas/intellij-inspections-detekt-rules) to a newer release. Use when the user asks to update, upgrade or bump the custom detekt rules or their jars, or names a new detekt-rules or intellij-inspections-detekt-rules release or version.
+description: Update the custom detekt rule sets (overpas-* rule set jars from github.com/overpas/detekt-rules, intellij-* rule set artifacts on Maven Central from github.com/overpas/intellij-inspections-detekt-rules) to a newer release. Use when the user asks to update, upgrade or bump the custom detekt rules or their jars, or names a new detekt-rules or intellij-inspections-detekt-rules release or version.
 ---
 
 # Update the detekt rules
@@ -78,14 +78,15 @@ for each of them in the config.
 
 ## IntelliJ inspection rules
 
-The `intellij-*` rule sets come from the GitHub releases of
-`overpas/intellij-inspections-detekt-rules`: the bundle jars for kotlin and jvm, plus the single jar
-for gradle-best-practices, which has no bundle. Download only these jars with
-`-p 'intellij-inspections-kotlin-all-*.jar' -p 'intellij-inspections-jvm-all-*.jar' -p 'intellij-inspections-gradle-best-practices-*.jar'`,
-and keep only their lines in the checksum file, because the other single jars duplicate the rules of
-the bundles.
-Update them with the steps above, with the commit message
-`Update the IntelliJ inspection detekt rules to <target>`.
+The `intellij-*` rule sets come from Maven Central (`io.github.overpas`), released from
+`overpas/intellij-inspections-detekt-rules`: the bundles for kotlin and jvm, plus the single
+artifact for gradle-best-practices, which has no bundle. Do not add the other single artifacts,
+because they duplicate the rules of the bundles.
+Update them with the steps above, with these differences:
+
+- The current version is `intellij-inspections` in `gradle/libs.versions.toml`.
+- Instead of step 4, set that version to the target.
+- Commit with the message `Update the IntelliJ inspection detekt rules to <target>`.
 
 Most of these rules implement `RequiresAnalysisApi`, and `detekt-type-resolution.yml` does not build
 upon the default config, so these rules are off unless the file lists them. Diff the
