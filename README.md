@@ -12,3 +12,12 @@ Install from [Jetbrains Marketplace](https://plugins.jetbrains.com/plugin/18619-
 2. Right click on a kotlin/java directory 
 3. Select "Compose ImageVector" at the bottom 
 4. Enter the necessary info to generate compose ImageVector icons: accessor name, vector image type, vector images directory, all assets property name. The output directory should be configured automatically.
+
+## Development
+Set the git hooks path to `config/git-hooks` for git hooks to work:
+
+```shell
+git config --local core.hooksPath config/git-hooks
+```
+
+The pre-commit hook runs `./gradlew detekt`.
