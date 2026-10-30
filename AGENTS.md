@@ -61,11 +61,6 @@ For quick feedback run specific tests instead of all tests.
 
 Run it when the change touches the IntelliJ Platform API, `plugin.xml` or the platform version.
 
-### L4: Manual check
-
-`./gradlew runIde` starts a sandbox IDE with the plugin. The UI has no automated tests, so ask the
-user to check a UI change there.
-
 ## Self-editing
 
 When editing .md files, including this file:
