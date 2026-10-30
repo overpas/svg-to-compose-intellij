@@ -1,19 +1,20 @@
 [versions]
 kotlin = "2.4.0"
 intellij-platform = "2.16.0"
-detekt = "1.23.8"
+detekt = "2.0.0-alpha.6"
 junit = "4.13.2"
 kotlin-coroutines = "1.11.0"
 svg-to-compose = "0.11.0"
 mockito-kotlin = "6.3.0"
 compose-desktop = "1.11.1"
 turbine = "1.2.1"
-detekt-compose-rules = "1.4.0"
+compose-rules = "0.6.6"
 lifecycle = "2.9.2"
 
 [libraries]
 svg-to-compose = { group = "com.github.DevSrSouza", name = "svg-to-compose", version.ref = "svg-to-compose" }
-detekt-compose-rules = { module = "ru.kode:detekt-rules-compose", version.ref = "detekt-compose-rules" }
+detekt-compose-rules = { module = "io.nlopez.compose.rules:detekt", version.ref = "compose-rules" }
+detekt-ktlint-wrapper = { module = "dev.detekt:detekt-rules-ktlint-wrapper", version.ref = "detekt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockito-kotlin" }
 kotlin-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
@@ -24,6 +25,6 @@ lifecycle-runtime-desktop = { group = "androidx.lifecycle", name = "lifecycle-ru
 [plugins]
 intellij-platform = { id = "org.jetbrains.intellij.platform", version.ref = "intellij-platform" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 compose-desktop = { id = "org.jetbrains.compose", version.ref = "compose-desktop" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

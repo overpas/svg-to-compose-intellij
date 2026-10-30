@@ -1,27 +1,16 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("java")
-    alias(libs.plugins.intellij.platform)
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.detekt)
-    alias(libs.plugins.compose.desktop)
+    id("kotlin-jvm")
+    id("static-analysis")
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.desktop)
+    alias(libs.plugins.intellij.platform)
 }
 
-java {
-    sourceCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
-    targetCompatibility = JavaVersion.toVersion(properties["jvm-version"].toString())
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget = JvmTarget.fromTarget(properties["jvm-version"].toString())
-    }
-}
-
-fun environment(key: String) = providers.environmentVariable(key)
+fun environment(key: String) =
+    providers.environmentVariable(key)
 
 group = "by.overpass"
 version = properties["version"].toString()
@@ -62,7 +51,6 @@ dependencies {
     implementation(libs.lifecycle.runtime.desktop) {
         exclude(group = "org.jetbrains.kotlinx")
     }
-    detektPlugins(libs.detekt.compose.rules)
     testImplementation(kotlin("test"))
     testImplementation(libs.junit)
     testImplementation(libs.mockito.kotlin)
