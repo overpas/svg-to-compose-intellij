@@ -27,7 +27,7 @@ private const val CANCEL = "Cancel"
 private const val EMPTY_FIELD = "//div[@class='ComposeNode' and @editabletext='']"
 private const val FOCUSED_EMPTY_FIELD = "//div[@class='ComposeNode' and @editabletext='' and @focused='true']"
 private val DIALOG_TIMEOUT = 30.seconds
-private val MENU_RETRY_INTERVAL = 3.seconds
+private val RETRY_INTERVAL = 3.seconds
 
 class GeneratorScenarios {
 
@@ -71,12 +71,18 @@ class GeneratorScenarios {
     private fun <T> Driver.withDialog(block: IdeaFrameUI.(DialogUiComponent) -> T): T {
         val frame = ideFrame()
         frame.requireInputFocus()
-        invokeAction("ActivateProjectToolWindow")
-        val tree = frame.projectView().projectViewTree
+        val projectView = frame.projectView()
+        waitFor("Project view is open", DIALOG_TIMEOUT, RETRY_INTERVAL) {
+            if (projectView.notPresent()) {
+                invokeAction("ActivateProjectToolWindow")
+            }
+            projectView.present()
+        }
+        val tree = projectView.projectViewTree
         tree.waitForNodesLoaded()
         tree.expandAll()
         val menu = frame.popupMenu()
-        waitFor("context menu is open", DIALOG_TIMEOUT, MENU_RETRY_INTERVAL) {
+        waitFor("context menu is open", DIALOG_TIMEOUT, RETRY_INTERVAL) {
             if (menu.notPresent()) {
                 tree.rightClickRow { "icons" in it }
             }

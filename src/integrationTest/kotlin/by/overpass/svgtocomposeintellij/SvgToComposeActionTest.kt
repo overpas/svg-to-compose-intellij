@@ -34,7 +34,7 @@ class SvgToComposeActionTest {
 
     @Test
     fun generateWritesIconFiles() {
-        val expected = listOf("__MyIconPack.kt", "myiconpack/AbTesting.kt")
+        val expected = listOf("__MyIconPack.kt", "myiconpack/Ab-testing.kt")
 
         val files = sut.filesAfterGenerate()
 

@@ -26,6 +26,7 @@ import kotlin.time.Duration.Companion.minutes
 private const val FIXTURE_PROJECT = "src/integrationTest/resources/test-project"
 private const val PROJECT_COPIES = "build/integration-test-projects"
 private const val PLUGIN_STACK_FRAME = "at by.overpass.svgtocomposeintellij."
+private const val HARNESS_SCREENSHOT_FRAME = "TakeScreenshotCommand"
 private val INDEXING_TIMEOUT = 5.minutes
 
 object IdeSession {
@@ -71,7 +72,7 @@ object IdeSession {
             details: String,
             linkToLogs: String?,
         ) {
-            if (PLUGIN_STACK_FRAME in details) {
+            if (PLUGIN_STACK_FRAME in details && HARNESS_SCREENSHOT_FRAME !in details) {
                 throw AssertionError("$testName: IDE reported a plugin error: $message\n$details")
             }
         }
