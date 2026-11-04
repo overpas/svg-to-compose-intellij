@@ -10,6 +10,7 @@ import com.intellij.driver.sdk.ui.components.elements.dialog
 import com.intellij.driver.sdk.ui.components.elements.popupMenu
 import com.intellij.driver.sdk.ui.components.elements.waitForNoOpenedDialogs
 import com.intellij.driver.sdk.waitFor
+import java.awt.Point
 import java.nio.file.Path
 import kotlin.io.path.exists
 import kotlin.io.path.invariantSeparatorsPathString
@@ -26,6 +27,7 @@ private const val GENERATE = "Generate"
 private const val CANCEL = "Cancel"
 private const val EMPTY_FIELD = "//div[@class='ComposeNode' and @editabletext='']"
 private const val FOCUSED_EMPTY_FIELD = "//div[@class='ComposeNode' and @editabletext='' and @focused='true']"
+private val FIELD_LEFT_EDGE = Point(10, 10)
 private val DIALOG_TIMEOUT = 30.seconds
 private val RETRY_INTERVAL = 3.seconds
 
@@ -55,7 +57,7 @@ class GeneratorScenarios {
     fun filesAfterGenerate(): List<String> =
         IdeSession.run("generate") { projectHome ->
             withDialog { dialogHandle ->
-                dialogHandle.x(EMPTY_FIELD).click()
+                dialogHandle.x(EMPTY_FIELD).click(FIELD_LEFT_EDGE)
                 waitFor("vector images field has focus", DIALOG_TIMEOUT) {
                     dialogHandle.xx(FOCUSED_EMPTY_FIELD).list().isNotEmpty()
                 }
