@@ -1,4 +1,5 @@
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import java.time.Duration
 
 plugins {
     id("java")
@@ -13,9 +14,16 @@ fun environment(key: String) =
     providers.environmentVariable(key)
 
 val kotlinxGroup = "org.jetbrains.kotlinx"
+val integrationTestTimeoutMinutes = 45L
 
 group = "by.overpass"
 version = properties["version"].toString()
+
+val integrationTest = "integrationTest"
+val integrationTestSourceSet = sourceSets.create(integrationTest)
+val integrationTestImplementation = configurations[integrationTestSourceSet.implementationConfigurationName]
+val integrationTestCompileOnly = configurations[integrationTestSourceSet.compileOnlyConfigurationName]
+val integrationTestRuntimeOnly = configurations[integrationTestSourceSet.runtimeOnlyConfigurationName]
 
 repositories {
     mavenCentral()
@@ -41,6 +49,10 @@ dependencies {
         pluginVerifier()
         zipSigner()
         testFramework(TestFrameworkType.Platform)
+        testFramework(
+            TestFrameworkType.Starter,
+            configurationName = integrationTestSourceSet.implementationConfigurationName,
+        )
     }
     implementation(libs.svg.to.compose) {
         exclude(group = kotlinxGroup)
@@ -58,6 +70,12 @@ dependencies {
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.turbine)
+    integrationTestImplementation(kotlin("test"))
+    integrationTestImplementation(libs.junit.jupiter)
+    integrationTestImplementation(libs.kodein.di.jvm)
+    integrationTestImplementation(libs.kotlin.coroutines.core.jvm)
+    integrationTestCompileOnly(libs.compose.runtime)
+    integrationTestRuntimeOnly(libs.junit.platform.launcher)
 }
 
 intellijPlatform {
@@ -97,6 +115,19 @@ intellijPlatform {
         ides {
             recommended()
         }
+    }
+}
+
+intellijPlatformTesting.testIdeUi.register(integrationTest) {
+    task {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        description = "Runs UI tests against a real IDE with the built plugin installed."
+        testClassesDirs = integrationTestSourceSet.output.classesDirs
+        classpath = integrationTestSourceSet.runtimeClasspath
+        systemProperty("ide.version", properties["platform-version"].toString())
+        timeout = Duration.ofMinutes(integrationTestTimeoutMinutes)
+        useJUnitPlatform()
+        shouldRunAfter(tasks.test)
     }
 }
 

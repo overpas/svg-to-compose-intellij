@@ -21,3 +21,11 @@ git config --local core.hooksPath config/git-hooks
 ```
 
 The pre-commit hook runs `./gradlew detekt`.
+
+Integration tests start a real IDE with the built plugin:
+
+```shell
+./gradlew integrationTest
+```
+
+They take control of the mouse and keyboard, and failures save full-screen screenshots to `out/`. Do not use the machine during a run. CI runs them on pull requests. On macOS, the application that starts the tests needs the Accessibility permission in System Settings.

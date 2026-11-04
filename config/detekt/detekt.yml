@@ -107,7 +107,7 @@ overpas-coroutines:
     allowedFunctions: ['main']
   SharingInFunction:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
     sharingCalls: ['stateIn', 'shareIn']
   StoredCoroutineScope:
     active: true
@@ -120,7 +120,7 @@ overpas-gradle:
     active: true
   GradleDeclarationOrder:
     active: true
-    testLibraries: ['junit', 'kotlin.coroutines.test', 'kotlin.test', 'mockito', 'turbine']
+    testLibraries: ['junit', 'kodein', 'kotlin.coroutines', 'kotlin.test', 'mockito', 'turbine']
 
 overpas-style:
   ExpressionBodyOnNewLine:
@@ -145,7 +145,7 @@ overpas-style:
   RedundantFunctionName:
     active: true
     ignoredWords: ['And', 'At', 'By', 'For', 'From', 'In', 'Of', 'On', 'Or', 'To', 'With']
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
   SetupWithoutApply:
     active: true
     minUseCount: 2
@@ -220,7 +220,7 @@ complexity:
   LabeledExpression:
     active: true
   LargeClass:
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
   LongMethod:
     allowedLines: 100
     ignoreAnnotated: ['Test']
@@ -228,9 +228,9 @@ complexity:
     active: true
   StringLiteralDuplication:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
   TooManyFunctions:
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
     allowedFunctionsPerFile: 15
     allowedFunctionsPerClass: 15
     allowedFunctionsPerInterface: 15
@@ -253,7 +253,7 @@ naming:
     active: true
   FunctionNameMaxLength:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
   FunctionNameMinLength:
     active: true
   FunctionNaming:
