@@ -11,7 +11,7 @@ mockito-kotlin = "6.4.0"
 compose-desktop = "1.12.2"
 turbine = "1.2.1"
 compose-rules = "0.6.8"
-intellij-inspections = "0.2.0"
+intellij-inspections = "0.3.0"
 lifecycle = "2.11.0"
 
 [libraries]
