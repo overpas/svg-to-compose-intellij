@@ -44,13 +44,12 @@ jobs:
         if: runner.os != 'Linux'
         run: ./gradlew integrationTest
       - name: Upload test output
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: integration-test-${{ matrix.os }}
           path: |
             build/reports/tests/
             build/test-results/integrationTest/
-            build/integration-test-diagnostics/
             out/ide-tests/tests/**/log/
           retention-days: 7
