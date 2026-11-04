@@ -61,6 +61,16 @@ For quick feedback run specific tests instead of all tests.
 
 Run it when the change touches the IntelliJ Platform API, `plugin.xml` or the platform version.
 
+### L4: Integration tests
+
+```shell
+./gradlew integrationTest # starts a real IDE, slow, runs on pull requests in CI
+```
+
+Run it when the change touches user-facing plugin behavior. Tests that use mouse or keyboard input
+send it to screen coordinates, so run them only on CI or on an idle machine. Local runs can also
+save full-screen screenshots to `out/`.
+
 ## Self-editing
 
 When editing .md files, including this file:

@@ -70,7 +70,7 @@ exceptions:
     active: true
   InstanceOfCheckForException:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
   ObjectExtendsThrowable:
     active: true
   ReturnFromFinally:
@@ -464,7 +464,7 @@ intellij-kotlin-redundant-constructs:
     active: true
   UnnecessaryVariable:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
   UnusedContextParameterCall:
     active: true
   UnusedReceiverParameter:
@@ -642,7 +642,7 @@ overpas-architecture:
   LowCohesion:
     active: true
     severity: 'error'
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
   RepeatedCollaboratorType:
     active: true
     excludedTypes: ['kotlin.Boolean', 'kotlin.Char', 'kotlin.Number', 'kotlin.UByte', 'kotlin.UShort', 'kotlin.UInt', 'kotlin.ULong', 'kotlin.CharSequence', 'kotlin.collections.Iterable', 'kotlin.collections.Map', 'kotlin.Array', 'kotlin.BooleanArray', 'kotlin.CharArray', 'kotlin.ByteArray', 'kotlin.ShortArray', 'kotlin.IntArray', 'kotlin.LongArray', 'kotlin.FloatArray', 'kotlin.DoubleArray', 'kotlin.sequences.Sequence', 'kotlin.Function', 'kotlin.Enum', 'kotlin.time.Duration', 'kotlin.time.Instant', 'kotlin.uuid.Uuid', 'kotlin.coroutines.CoroutineContext', 'kotlinx.coroutines.CoroutineDispatcher']
@@ -684,7 +684,7 @@ performance:
     allowedOperations: 2
   SpreadOperator:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
 
 potential-bugs:
   AvoidReferentialEquality:
@@ -782,7 +782,7 @@ potential-bugs:
     active: true
   UnsafeCallOnNullableType:
     active: true
-    excludes: ['**/test/**']
+    excludes: ['**/test/**', '**/integrationTest/**']
   UnsafeCast:
     active: true
     aliases: ['UNCHECKED_CAST']
