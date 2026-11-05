@@ -2,7 +2,8 @@ package by.overpass.svgtocomposeintellij.generator
 
 import by.overpass.svgtocomposeintellij.ProjectScopeProviderService
 import by.overpass.svgtocomposeintellij.generator.data.DataProcessingSvgIconsSvgIconsGenerator
-import by.overpass.svgtocomposeintellij.generator.domain.SvgToComposeDataProcessor
+import by.overpass.svgtocomposeintellij.generator.data.ProjectSourceRootResolver
+import by.overpass.svgtocomposeintellij.generator.domain.SvgToComposeDataProcessorImpl
 import by.overpass.svgtocomposeintellij.generator.domain.VectorImageTypeDetector
 import by.overpass.svgtocomposeintellij.generator.presentation.SvgToComposeViewModelImpl
 import by.overpass.svgtocomposeintellij.generator.presentation.validation.CantBeEmptyStringValidator
@@ -49,7 +50,7 @@ class SvgToComposeAction : DumbAwareAction() {
                     SvgToComposeViewModelImpl(
                         targetDir = targetDir,
                         svgIconsGenerator = DataProcessingSvgIconsSvgIconsGenerator(
-                            SvgToComposeDataProcessor,
+                            SvgToComposeDataProcessorImpl(ProjectSourceRootResolver(project)),
                         ),
                         vectorImageTypeDetector = VectorImageTypeDetector,
                         nonStringEmptyValidator = CantBeEmptyStringValidator,

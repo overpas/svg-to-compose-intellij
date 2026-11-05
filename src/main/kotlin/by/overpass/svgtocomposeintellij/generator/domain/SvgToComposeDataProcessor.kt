@@ -5,22 +5,25 @@ import java.io.File
 interface SvgToComposeDataProcessor {
 
     operator fun invoke(data: SvgToComposeData): SvgToComposeData
+}
 
-    companion object : SvgToComposeDataProcessor {
+class SvgToComposeDataProcessorImpl(private val sourceRootResolver: SourceRootResolver) : SvgToComposeDataProcessor {
 
-        private val pathRegex = """.*[/\\](kotlin|java)[/\\](.*)""".toRegex()
+    private val conventionalSourceRootRegex = """(.*[/\\]src[/\\](?:[^/\\]+[/\\])??(?:kotlin|java))[/\\].+""".toRegex()
 
-        override operator fun invoke(data: SvgToComposeData): SvgToComposeData {
-            val initialPath = data.outputDir.path
-            val pkg = pathRegex.find(initialPath)?.run { groupValues[2] }
-            return if (pkg.isNullOrEmpty()) {
-                data
-            } else {
-                val newPath = initialPath.removeSuffix(pkg)
-                val newPackage = pkg.replace("[/\\\\]".toRegex(), ".")
-                val outputDir = File(newPath)
-                data.copy(outputDir = outputDir, applicationIconPackage = newPackage)
-            }
+    override operator fun invoke(data: SvgToComposeData): SvgToComposeData {
+        val outputDir = data.outputDir
+        val sourceRoot = sourceRootResolver.resolve(outputDir)?.takeIf { outputDir.startsWith(it) }
+            ?: conventionalSourceRoot(outputDir)
+            ?: return data
+        val newPackage = outputDir.relativeTo(sourceRoot).invariantSeparatorsPath.replace('/', '.')
+        return if (newPackage.isEmpty()) {
+            data
+        } else {
+            data.copy(outputDir = sourceRoot, applicationIconPackage = newPackage)
         }
     }
+
+    private fun conventionalSourceRoot(dir: File): File? =
+        conventionalSourceRootRegex.matchEntire(dir.path)?.run { File(groupValues[1]) }
 }
