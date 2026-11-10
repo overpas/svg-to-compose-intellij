@@ -1,6 +1,6 @@
 [versions]
 kotlin = "2.4.21"
-intellij-platform = "2.19.0"
+intellij-platform = "2.20.1"
 detekt = "2.0.0-alpha.6"
 junit = "4.13.2"
 junit-jupiter = "5.13.4"
