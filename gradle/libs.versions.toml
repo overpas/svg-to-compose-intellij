@@ -1,18 +1,18 @@
 [versions]
 kotlin = "2.4.21"
-intellij-platform = "2.19.0"
+intellij-platform = "2.20.1"
 detekt = "2.0.0-alpha.6"
 junit = "4.13.2"
-junit-jupiter = "5.13.4"
-kodein = "7.28.0"
-kotlin-coroutines = "1.10.2"
+junit-jupiter = "5.14.4"
+kodein = "7.33.0"
+kotlin-coroutines = "1.11.0"
 svg-to-compose = "0.11.0"
 mockito-kotlin = "6.4.0"
 compose-desktop = "1.12.2"
 turbine = "1.2.1"
 compose-rules = "0.6.8"
-intellij-inspections = "0.3.0"
-lifecycle = "2.11.0"
+intellij-inspections = "0.4.0"
+lifecycle = "2.11.1"
 
 [libraries]
 svg-to-compose = { group = "com.github.DevSrSouza", name = "svg-to-compose", version.ref = "svg-to-compose" }
